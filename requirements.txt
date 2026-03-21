@@ -1,0 +1,4 @@
+customtkinter>=5.2.2
+tkcalendar>=1.6.1
+reportlab>=4.0.0
+holidays>=0.40

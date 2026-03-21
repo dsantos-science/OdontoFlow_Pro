@@ -1,0 +1,20 @@
+# Ignorar bancos de dados locais
+database/
+*.db
+*.sqlite3
+
+# Ignorar pastas de exportação temporal
+exports/
+
+# Ignorar virtual environments
+venv/
+.venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# OS Files
+.DS_Store
+Thumbs.db
