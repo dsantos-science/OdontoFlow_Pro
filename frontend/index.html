@@ -1,0 +1,3349 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OdontoFlow Pro v4.6</title>
+  <style>
+    /* ════════════════════════════════════════
+   RESET + VARIÁVEIS
+════════════════════════════════════════ */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --bg: #111111;
+      --bg2: #1a1a1a;
+      --bg3: #222222;
+      --bg4: #2a2a2a;
+      --border: rgba(255, 255, 255, 0.08);
+      --border2: rgba(255, 255, 255, 0.13);
+      --txt: #ffffff;
+      --txt2: rgba(255, 255, 255, 0.65);
+      --txt3: rgba(255, 255, 255, 0.35);
+      --pro: #00c48c;
+      --pro-dim: rgba(0, 196, 140, 0.15);
+      --desk: #4f9eff;
+      --desk-dim: rgba(79, 158, 255, 0.15);
+      --sec: #ff9f2e;
+      --sec-dim: rgba(255, 159, 46, 0.15);
+      --danger: #ff5c5c;
+      --warn: #ff9f2e;
+      --success: #00c48c;
+      --r-pill: 999px;
+      --r-card: 18px;
+      --r-ico: 12px;
+    }
+
+    html,
+    body {
+      height: 100%;
+      background: var(--bg);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      color: var(--txt);
+      font-size: 13px;
+      overflow: hidden
+    }
+
+    /* ════════════════════════════════════════
+   ANIMAÇÕES
+════════════════════════════════════════ */
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1
+      }
+
+      50% {
+        opacity: .3
+      }
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg)
+      }
+    }
+
+    @keyframes riskPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 0 rgba(255, 92, 92, 0.4)
+      }
+
+      60% {
+        box-shadow: 0 0 0 8px rgba(255, 92, 92, 0)
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(6px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes ssePing {
+      0% {
+        transform: scale(1);
+        opacity: 1
+      }
+
+      100% {
+        transform: scale(2.4);
+        opacity: 0
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px)
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0)
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        opacity: .5
+      }
+
+      50% {
+        opacity: 1
+      }
+
+      100% {
+        opacity: .5
+      }
+    }
+
+    /* ════════════════════════════════════════
+   TELA DE LOGIN
+════════════════════════════════════════ */
+    #login-screen {
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      animation: fadeIn .4s ease;
+    }
+
+    .login-card {
+      background: var(--bg2);
+      border: 1px solid var(--border2);
+      border-radius: 24px;
+      padding: 40px;
+      width: 380px;
+      animation: slideUp .5s ease;
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 28px
+    }
+
+    .login-logo-ico {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: var(--pro-dim);
+      border: 1px solid rgba(0, 196, 140, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .login-logo-txt {
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -.02em
+    }
+
+    .login-logo-sub {
+      font-size: 10px;
+      color: var(--txt3);
+      margin-top: 2px;
+      font-weight: 400
+    }
+
+    .login-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px
+    }
+
+    .login-sub {
+      font-size: 11px;
+      color: var(--txt3);
+      margin-bottom: 24px
+    }
+
+    .login-field {
+      margin-bottom: 14px
+    }
+
+    .login-label {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--txt3);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 6px;
+      display: block
+    }
+
+    .login-input {
+      width: 100%;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 10px 14px;
+      color: var(--txt);
+      font-size: 12px;
+      outline: none;
+      transition: border .2s;
+    }
+
+    .login-input:focus {
+      border-color: rgba(0, 196, 140, 0.4)
+    }
+
+    .login-btn {
+      width: 100%;
+      background: var(--pro);
+      color: #000;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: opacity .2s;
+    }
+
+    .login-btn:hover {
+      opacity: .9
+    }
+
+    .login-btn:disabled {
+      opacity: .5;
+      cursor: not-allowed
+    }
+
+    .login-error {
+      font-size: 10px;
+      color: var(--danger);
+      text-align: center;
+      margin-top: 10px;
+      min-height: 16px;
+    }
+
+    .login-dev {
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .login-dev-title {
+      font-size: 9px;
+      color: var(--txt3);
+      text-align: center;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em
+    }
+
+    .dev-btn {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: var(--txt2);
+      font-size: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background .15s;
+    }
+
+    .dev-btn:hover {
+      background: var(--bg4);
+      color: var(--txt)
+    }
+
+    .dev-badge {
+      padding: 2px 7px;
+      border-radius: var(--r-pill);
+      font-size: 8px;
+      font-weight: 700;
+      margin-left: auto
+    }
+
+    .db-pro {
+      background: var(--pro-dim);
+      color: var(--pro)
+    }
+
+    .db-desk {
+      background: var(--desk-dim);
+      color: var(--desk)
+    }
+
+    .db-sec {
+      background: var(--sec-dim);
+      color: var(--sec)
+    }
+
+    /* ════════════════════════════════════════
+   APP SHELL
+════════════════════════════════════════ */
+    #app {
+      display: none;
+      flex-direction: column;
+      height: 100vh
+    }
+
+    #app.visible {
+      display: flex
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      height: 52px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      gap: 10px;
+      flex-shrink: 0;
+      z-index: 50;
+    }
+
+    .tb-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      white-space: nowrap
+    }
+
+    .tb-logo-ico {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: var(--pro-dim);
+      border: 1px solid rgba(0, 196, 140, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .tb-pill {
+      padding: 2px 8px;
+      border-radius: var(--r-pill);
+      font-size: 9px;
+      font-weight: 700
+    }
+
+    .tb-pill-pro {
+      background: var(--pro-dim);
+      color: var(--pro);
+      border: 1px solid rgba(0, 196, 140, 0.3)
+    }
+
+    .tb-pill-desk {
+      background: var(--desk-dim);
+      color: var(--desk);
+      border: 1px solid rgba(79, 158, 255, 0.3)
+    }
+
+    .tb-pill-sec {
+      background: var(--sec-dim);
+      color: var(--sec);
+      border: 1px solid rgba(255, 159, 46, 0.3)
+    }
+
+    .tb-search {
+      flex: 1;
+      max-width: 220px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 6px 12px;
+    }
+
+    .tb-search input {
+      background: none;
+      border: none;
+      outline: none;
+      color: var(--txt);
+      font-size: 11px;
+      width: 100%
+    }
+
+    .tb-search input::placeholder {
+      color: var(--txt3)
+    }
+
+    .clima-badge {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 5px 11px;
+      border-radius: var(--r-pill);
+      cursor: default;
+      transition: border .3s;
+    }
+
+    .clima-badge.alerta {
+      background: rgba(255, 159, 46, 0.06);
+      border: 1px solid rgba(255, 159, 46, 0.35)
+    }
+
+    .clima-badge.normal {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border)
+    }
+
+    .clima-txt {
+      line-height: 1.3
+    }
+
+    .clima-main {
+      font-size: 10px;
+      font-weight: 700
+    }
+
+    .clima-sub {
+      font-size: 8px;
+      color: var(--txt3)
+    }
+
+    .sse-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: var(--r-pill);
+      font-size: 9px;
+      font-weight: 700;
+      background: rgba(0, 196, 140, 0.07);
+      border: 1px solid rgba(0, 196, 140, 0.2);
+    }
+
+    .sse-badge.offline {
+      background: rgba(255, 92, 92, 0.07);
+      border-color: rgba(255, 92, 92, 0.25);
+      color: var(--danger)
+    }
+
+    .sse-badge.online {
+      color: var(--pro)
+    }
+
+    .sse-dot-wrap {
+      position: relative;
+      width: 8px;
+      height: 8px;
+      flex-shrink: 0
+    }
+
+    .sse-dot {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: currentColor
+    }
+
+    .sse-ping {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: currentColor;
+      animation: ssePing 1.6s ease-out infinite
+    }
+
+    .db-mode-badge {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 4px 9px;
+      border-radius: var(--r-pill);
+      font-size: 9px;
+      font-weight: 700;
+      background: rgba(255, 159, 46, 0.08);
+      border: 1px solid rgba(255, 159, 46, 0.25);
+      color: var(--warn);
+    }
+
+    .tb-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 7px
+    }
+
+    .tb-icon-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      position: relative;
+      transition: background .15s;
+    }
+
+    .tb-icon-btn:hover {
+      background: var(--bg4)
+    }
+
+    .tb-notif-dot {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--danger);
+      border: 1.5px solid var(--bg)
+    }
+
+    .sync-spin svg {
+      animation: spin 2s linear infinite
+    }
+
+    .sync-count {
+      position: absolute;
+      top: -5px;
+      right: -5px;
+      width: 15px;
+      height: 15px;
+      border-radius: 50%;
+      background: var(--warn);
+      font-size: 7px;
+      font-weight: 700;
+      color: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid var(--bg);
+    }
+
+    .tb-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+    }
+
+    /* ── APP BODY ── */
+    .app-body {
+      display: flex;
+      flex: 1;
+      overflow: hidden
+    }
+
+    /* ── SIDEBAR ── */
+    .sidebar {
+      width: 210px;
+      background: var(--bg2);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      flex-shrink: 0;
+      overflow-y: auto;
+    }
+
+    .sb-section {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--txt3);
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      padding: 0 12px;
+      margin: 12px 0 4px
+    }
+
+    .sb-section:first-child {
+      margin-top: 0
+    }
+
+    .sb-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      margin: 1px 6px;
+      border-radius: 10px;
+      color: var(--txt2);
+      font-size: 11px;
+      cursor: pointer;
+      transition: background .12s, color .12s;
+      user-select: none;
+    }
+
+    .sb-item:hover:not(.locked) {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--txt)
+    }
+
+    .sb-item.active-pro {
+      background: var(--pro-dim);
+      color: var(--pro);
+      border-right: 2px solid var(--pro);
+      margin-right: 4px
+    }
+
+    .sb-item.active-desk {
+      background: var(--desk-dim);
+      color: var(--desk);
+      border-right: 2px solid var(--desk);
+      margin-right: 4px
+    }
+
+    .sb-item.active-sec {
+      background: var(--sec-dim);
+      color: var(--sec);
+      border-right: 2px solid var(--sec);
+      margin-right: 4px
+    }
+
+    .sb-item.locked {
+      opacity: .22;
+      cursor: not-allowed
+    }
+
+    .sb-ico {
+      width: 28px;
+      height: 28px;
+      border-radius: 9px;
+      background: rgba(255, 255, 255, 0.07);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .sb-item.active-pro .sb-ico {
+      background: rgba(0, 196, 140, 0.18)
+    }
+
+    .sb-item.active-desk .sb-ico {
+      background: rgba(79, 158, 255, 0.18)
+    }
+
+    .sb-item.active-sec .sb-ico {
+      background: rgba(255, 159, 46, 0.18)
+    }
+
+    .sb-lbl {
+      flex: 1;
+      font-size: 11px
+    }
+
+    .sb-badge {
+      font-size: 8px;
+      padding: 1px 5px;
+      border-radius: var(--r-pill);
+      font-weight: 700
+    }
+
+    .sb-badge-n {
+      background: rgba(255, 255, 255, 0.1);
+      color: var(--txt2)
+    }
+
+    .sb-badge-r {
+      background: rgba(255, 92, 92, 0.22);
+      color: var(--danger)
+    }
+
+    .sb-badge-g {
+      background: rgba(0, 196, 140, 0.18);
+      color: var(--pro)
+    }
+
+    .sb-lock {
+      font-size: 7px;
+      padding: 1px 5px;
+      border-radius: var(--r-pill);
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--txt3);
+      border: 1px solid rgba(255, 255, 255, 0.07)
+    }
+
+    .sb-footer {
+      margin-top: auto;
+      padding: 10px 12px;
+      border-top: 1px solid var(--border)
+    }
+
+    .sb-user {
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .sb-user-av {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700
+    }
+
+    .sb-user-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .sb-user-role {
+      font-size: 8px;
+      color: var(--txt3)
+    }
+
+    /* ── MAIN CONTENT ── */
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 18px 62px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      position: relative;
+      background: var(--bg);
+    }
+
+    /* ── CÁPSULA FLUTUANTE ── */
+    .capsule {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--r-pill);
+      padding: 9px 6px;
+      z-index: 20;
+    }
+
+    .cap-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      transition: transform .15s, opacity .15s;
+    }
+
+    .cap-btn:hover {
+      transform: scale(1.1)
+    }
+
+    .cap-btn.disabled {
+      opacity: .25;
+      cursor: not-allowed;
+      pointer-events: none
+    }
+
+    .cap-sep {
+      width: 18px;
+      height: 1px;
+      background: rgba(255, 255, 255, 0.09)
+    }
+
+    /* ════════════════════════════════════════
+   COMPONENTES VISUAIS
+════════════════════════════════════════ */
+
+    /* PAGE HEADER */
+    .page-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between
+    }
+
+    .page-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--txt);
+      letter-spacing: -.02em
+    }
+
+    .page-sub {
+      font-size: 10px;
+      color: var(--txt3);
+      margin-top: 2px
+    }
+
+    .fab {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 9px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s;
+      white-space: nowrap;
+      color: #000;
+    }
+
+    .fab:hover {
+      opacity: .88
+    }
+
+    .fab-pro {
+      background: var(--pro)
+    }
+
+    .fab-desk {
+      background: var(--desk)
+    }
+
+    .fab-sec {
+      background: var(--sec)
+    }
+
+    /* SSE STATUS BAR */
+    .sse-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      background: rgba(0, 196, 140, 0.06);
+      border: 1px solid rgba(0, 196, 140, 0.18);
+      border-radius: 11px;
+      animation: fadeIn .3s ease;
+    }
+
+    .sse-bar.offline-bar {
+      background: rgba(255, 92, 92, 0.05);
+      border-color: rgba(255, 92, 92, 0.2)
+    }
+
+    .sse-bar-txt {
+      font-size: 9px;
+      color: var(--pro);
+      font-weight: 700;
+      flex: 1
+    }
+
+    .sse-bar.offline-bar .sse-bar-txt {
+      color: var(--danger)
+    }
+
+    .sse-bar-right {
+      font-size: 8px;
+      color: var(--txt3);
+      white-space: nowrap
+    }
+
+    /* DB MODE BANNER */
+    .db-resilience-bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 13px;
+      background: rgba(255, 159, 46, 0.06);
+      border: 1px solid rgba(255, 159, 46, 0.2);
+      border-radius: 11px;
+      font-size: 9px;
+      color: var(--warn);
+      font-weight: 700;
+    }
+
+    /* METRICS */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px
+    }
+
+    .metrics-grid.three {
+      grid-template-columns: repeat(3, minmax(0, 1fr))
+    }
+
+    .metric-card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px 14px;
+      animation: fadeIn .4s ease;
+    }
+
+    .metric-label {
+      font-size: 8px;
+      color: var(--txt3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      margin-bottom: 4px
+    }
+
+    .metric-value {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--txt);
+      letter-spacing: -.02em
+    }
+
+    .metric-delta {
+      font-size: 9px;
+      margin-top: 3px;
+      font-weight: 700
+    }
+
+    .metric-delta.up {
+      color: var(--pro)
+    }
+
+    .metric-delta.dn {
+      color: var(--danger)
+    }
+
+    /* CARD BASE */
+    .card {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-card);
+      padding: 14px;
+      animation: fadeIn .35s ease
+    }
+
+    .card-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--txt);
+      margin-bottom: 10px;
+      letter-spacing: -.01em
+    }
+
+    .tabs-row {
+      display: flex;
+      gap: 3px;
+      margin-bottom: 10px
+    }
+
+    .tab-btn {
+      padding: 4px 11px;
+      font-size: 10px;
+      border-radius: var(--r-pill);
+      cursor: pointer;
+      color: var(--txt3);
+      background: transparent;
+      border: none;
+      font-weight: 500;
+      transition: background .15s, color .15s
+    }
+
+    .tab-btn.active-pro {
+      background: var(--pro-dim);
+      color: var(--pro);
+      font-weight: 700
+    }
+
+    .tab-btn.active-desk {
+      background: var(--desk-dim);
+      color: var(--desk);
+      font-weight: 700
+    }
+
+    .tab-btn.active-sec {
+      background: var(--sec-dim);
+      color: var(--sec);
+      font-weight: 700
+    }
+
+    /* RISK OVERLAY — Motor V14 */
+    .risk-overlay {
+      background: rgba(255, 92, 92, 0.05);
+      border: 1px solid rgba(255, 92, 92, 0.22);
+      border-radius: 14px;
+      padding: 13px;
+      animation: fadeIn .3s ease;
+    }
+
+    .risk-header {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 9px
+    }
+
+    .risk-title {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--danger);
+      flex: 1
+    }
+
+    .risk-score-pill {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--danger);
+      background: rgba(255, 92, 92, 0.14);
+      padding: 2px 9px;
+      border-radius: var(--r-pill);
+    }
+
+    .risk-factors {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 9px
+    }
+
+    .risk-factor {
+      font-size: 9px;
+      color: var(--txt2);
+      display: flex;
+      align-items: flex-start;
+      gap: 6px
+    }
+
+    .risk-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--danger);
+      flex-shrink: 0;
+      margin-top: 3px
+    }
+
+    .risk-ia-block {
+      background: rgba(79, 158, 255, 0.08);
+      border: 1px solid rgba(79, 158, 255, 0.18);
+      border-radius: 10px;
+      padding: 8px 11px;
+      margin-bottom: 9px;
+    }
+
+    .risk-ia-title {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--desk);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: 5px
+    }
+
+    .risk-ia-row {
+      font-size: 9px;
+      color: var(--txt2);
+      margin-bottom: 3px;
+      display: flex;
+      gap: 5px
+    }
+
+    .risk-ia-lbl {
+      color: var(--txt3);
+      flex-shrink: 0
+    }
+
+    .risk-actions {
+      display: flex;
+      gap: 7px
+    }
+
+    .risk-btn-pix {
+      flex: 1;
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      border-radius: var(--r-pill);
+      padding: 8px 12px;
+      font-size: 9px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity .2s;
+    }
+
+    .risk-btn-pix:hover {
+      opacity: .88
+    }
+
+    .risk-btn-skip {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--txt2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      padding: 8px 12px;
+      font-size: 9px;
+      cursor: pointer;
+      transition: background .15s;
+    }
+
+    .risk-btn-skip:hover {
+      background: var(--bg3)
+    }
+
+    /* AGENDA SLOTS */
+    .agenda-list {
+      display: flex;
+      flex-direction: column;
+      gap: 3px
+    }
+
+    .agenda-slot {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 9px;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: background .12s;
+      animation: fadeIn .3s ease;
+    }
+
+    .agenda-slot:hover:not(.locked-slot) {
+      background: var(--bg3)
+    }
+
+    .agenda-slot.risk-alto {
+      border: 2px solid rgba(255, 92, 92, 0.45);
+      background: rgba(255, 92, 92, 0.04);
+      animation: riskPulse 2.2s ease-in-out infinite;
+    }
+
+    .agenda-slot.locked-slot {
+      border: 1px dashed rgba(255, 159, 46, 0.3);
+      background: rgba(255, 159, 46, 0.03);
+      cursor: not-allowed;
+    }
+
+    .slot-time {
+      text-align: center;
+      flex-shrink: 0
+    }
+
+    .slot-hora {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .slot-periodo {
+      font-size: 8px;
+      color: var(--txt3)
+    }
+
+    .slot-body {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      min-width: 0;
+      flex: 1
+    }
+
+    .slot-av {
+      width: 26px;
+      height: 26px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 8px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .slot-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .slot-name {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--txt);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .slot-proc {
+      font-size: 9px;
+      color: var(--txt3)
+    }
+
+    .risk-bar-wrap {
+      height: 2px;
+      background: rgba(255, 255, 255, 0.06);
+      border-radius: 99px;
+      margin-top: 3px;
+      overflow: hidden
+    }
+
+    .risk-bar {
+      height: 100%;
+      border-radius: 99px;
+      transition: width .5s ease
+    }
+
+    .slot-actions {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0
+    }
+
+    .wa-btn {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: #25D366;
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform .15s;
+      flex-shrink: 0;
+    }
+
+    .wa-btn:hover {
+      transform: scale(1.12)
+    }
+
+    .wa-btn.disabled {
+      opacity: .25;
+      cursor: not-allowed;
+      pointer-events: none
+    }
+
+    .status-pill {
+      font-size: 8px;
+      padding: 3px 8px;
+      border-radius: var(--r-pill);
+      font-weight: 700;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      flex-shrink: 0
+    }
+
+    .pill-live {
+      background: rgba(255, 92, 92, 0.15);
+      color: var(--danger)
+    }
+
+    .pill-ok {
+      background: rgba(0, 196, 140, 0.15);
+      color: var(--pro)
+    }
+
+    .pill-wait {
+      background: rgba(255, 159, 46, 0.15);
+      color: var(--warn)
+    }
+
+    .pill-pago {
+      background: rgba(0, 196, 140, 0.22);
+      color: var(--pro)
+    }
+
+    .pill-sinal {
+      background: rgba(79, 158, 255, 0.15);
+      color: var(--desk)
+    }
+
+    .pill-lock {
+      background: rgba(255, 255, 255, 0.06);
+      color: var(--txt3);
+      border: 1px solid rgba(255, 255, 255, 0.08)
+    }
+
+    .live-dot {
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: currentColor;
+      animation: pulse 1s ease-in-out infinite
+    }
+
+    .score-badge {
+      font-size: 8px;
+      padding: 2px 7px;
+      border-radius: var(--r-pill);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 3px
+    }
+
+    .score-alto {
+      background: rgba(255, 92, 92, 0.18);
+      color: var(--danger)
+    }
+
+    .score-medio {
+      background: rgba(255, 159, 46, 0.18);
+      color: var(--warn)
+    }
+
+    .score-baixo {
+      background: rgba(0, 196, 140, 0.15);
+      color: var(--pro)
+    }
+
+    .agenda-sep {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 4px 0
+    }
+
+    .sec-locked-banner {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 10px;
+      background: rgba(255, 159, 46, 0.07);
+      border: 1px solid rgba(255, 159, 46, 0.2);
+      border-radius: 9px;
+      margin-bottom: 8px;
+      font-size: 9px;
+      color: var(--warn);
+      font-weight: 600;
+    }
+
+    /* FINANCEIRO */
+    .fin-cards {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 7px;
+      margin-bottom: 10px
+    }
+
+    .fin-card {
+      background: var(--bg3);
+      border-radius: 12px;
+      padding: 10px 12px;
+      border: 1px solid var(--border)
+    }
+
+    .fin-label {
+      font-size: 8px;
+      color: var(--txt3);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .05em;
+      margin-bottom: 3px
+    }
+
+    .fin-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .fin-delta {
+      font-size: 8px;
+      margin-top: 2px;
+      font-weight: 700
+    }
+
+    .bar-row {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      margin-bottom: 5px
+    }
+
+    .bar-lbl {
+      font-size: 8px;
+      color: var(--txt3);
+      width: 22px;
+      text-align: right;
+      font-weight: 700;
+      flex-shrink: 0
+    }
+
+    .bar-track {
+      flex: 1;
+      height: 9px;
+      background: var(--bg4);
+      border-radius: var(--r-pill);
+      overflow: hidden;
+      border: 1px solid var(--border)
+    }
+
+    .bar-fill {
+      height: 100%;
+      border-radius: var(--r-pill);
+      background: var(--pro);
+      transition: width .6s ease
+    }
+
+    .bar-val {
+      font-size: 8px;
+      color: var(--txt2);
+      width: 44px;
+      font-weight: 500
+    }
+
+    /* RIGHT COL */
+    .right-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    .paciente-header {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 10px
+    }
+
+    .pac-av {
+      width: 34px;
+      height: 34px;
+      border-radius: 11px;
+      background: var(--pro-dim);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--pro);
+      flex-shrink: 0;
+      border: 1px solid rgba(0, 196, 140, 0.2)
+    }
+
+    .pac-nome {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .pac-meta {
+      font-size: 9px;
+      color: var(--txt3);
+      margin-top: 1px
+    }
+
+    .vitals-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px
+    }
+
+    .vital-card {
+      background: var(--bg3);
+      border-radius: 11px;
+      padding: 9px 11px;
+      border: 1px solid var(--border)
+    }
+
+    .vital-label {
+      font-size: 8px;
+      color: var(--txt3);
+      font-weight: 700;
+      margin-bottom: 2px
+    }
+
+    .vital-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .vital-unit {
+      font-size: 9px;
+      color: var(--txt2);
+      font-weight: 400
+    }
+
+    .vital-bar {
+      height: 2px;
+      background: rgba(255, 255, 255, 0.07);
+      border-radius: 99px;
+      margin-top: 5px
+    }
+
+    .vital-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: var(--pro)
+    }
+
+    .vital-fill.warn {
+      background: var(--warn)
+    }
+
+    .btn-secondary {
+      background: var(--bg3);
+      color: var(--txt2);
+      border: 1px solid var(--border);
+      border-radius: var(--r-pill);
+      padding: 7px 14px;
+      font-size: 10px;
+      cursor: pointer;
+      width: 100%;
+      text-align: center;
+      font-weight: 500;
+      margin-top: 8px;
+      transition: background .15s;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg4)
+    }
+
+    /* SYSTEM STATUS */
+    .sys-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 0
+    }
+
+    .sys-label {
+      font-size: 9px;
+      color: var(--txt2)
+    }
+
+    .sys-value {
+      font-size: 9px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px
+    }
+
+    .sys-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .sys-dot.ok {
+      background: var(--pro)
+    }
+
+    .sys-dot.warn {
+      background: var(--warn)
+    }
+
+    .sys-dot.err {
+      background: var(--danger)
+    }
+
+    .sys-dot.off {
+      background: var(--txt3)
+    }
+
+    .sys-sep {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 5px 0
+    }
+
+    .sys-note {
+      font-size: 8px;
+      color: var(--txt3);
+      text-align: center;
+      margin-top: 5px
+    }
+
+    /* OUTBOX */
+    .outbox-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 9px;
+      background: var(--bg3);
+      border-radius: 9px;
+      border: 1px solid var(--border);
+      margin-bottom: 6px;
+    }
+
+    .outbox-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .outbox-dot.pending {
+      background: var(--warn);
+      animation: pulse 1.2s ease-in-out infinite
+    }
+
+    .outbox-dot.error {
+      background: var(--danger)
+    }
+
+    .outbox-dot.sent {
+      background: var(--pro)
+    }
+
+    .outbox-info {
+      flex: 1;
+      min-width: 0
+    }
+
+    .outbox-op {
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--txt)
+    }
+
+    .outbox-detail {
+      font-size: 8px;
+      color: var(--txt3);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis
+    }
+
+    .outbox-tries {
+      font-size: 8px;
+      color: var(--txt3);
+      flex-shrink: 0
+    }
+
+    .outbox-item.error-item {
+      border-color: rgba(255, 92, 92, 0.2)
+    }
+
+    .outbox-item.error-item .outbox-op {
+      color: var(--danger)
+    }
+
+    /* CONTENT GRID */
+    .content-grid {
+      display: grid;
+      grid-template-columns: 1fr 232px;
+      gap: 10px
+    }
+
+    .left-col {
+      display: flex;
+      flex-direction: column;
+      gap: 10px
+    }
+
+    /* AVATAR COLORS */
+    .av-blue {
+      background: rgba(79, 158, 255, 0.2);
+      color: #4f9eff
+    }
+
+    .av-green {
+      background: rgba(0, 196, 140, 0.2);
+      color: #00c48c
+    }
+
+    .av-purple {
+      background: rgba(156, 39, 176, 0.2);
+      color: #ce93d8
+    }
+
+    .av-orange {
+      background: rgba(255, 159, 46, 0.2);
+      color: #ff9f2e
+    }
+
+    .av-red {
+      background: rgba(255, 92, 92, 0.15);
+      color: #ff5c5c
+    }
+
+    /* LOADING STATE */
+    .loading-shimmer {
+      background: linear-gradient(90deg, var(--bg2) 25%, var(--bg3) 50%, var(--bg2) 75%);
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: 8px;
+    }
+
+    /* SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 4px
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ════════════════════════════════════════
+     TELA DE LOGIN
+════════════════════════════════════════ -->
+  <div id="login-screen">
+    <div class="login-card">
+      <div class="login-logo">
+        <div class="login-logo-ico">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 3C8.5 3 6 5 6 8c0 2 1 3.5 2.5 4.5C5 14 3 17 3 20h18c0-3-2-6-5.5-7.5C17 11.5 18 10 18 8c0-3-2.5-5-6-5z"
+              stroke="#00c48c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M9 8h6M12 8v4" stroke="#00c48c" stroke-width="1.4" stroke-linecap="round" />
+          </svg>
+        </div>
+        <div>
+          <div class="login-logo-txt">OdontoFlow Pro</div>
+          <div class="login-logo-sub">v4.6 · Motor Prescritivo V14</div>
+        </div>
+      </div>
+
+      <div class="login-title">Acesso ao sistema</div>
+      <div class="login-sub">Edge Computing · Offline-First · Zero Arrasto</div>
+
+      <div class="login-field">
+        <label class="login-label">E-mail</label>
+        <input class="login-input" id="login-email" type="email" placeholder="admin@odontoflow.local"
+          autocomplete="off">
+      </div>
+      <div class="login-field">
+        <label class="login-label">Senha</label>
+        <input class="login-input" id="login-senha" type="password" placeholder="••••••••">
+      </div>
+      <button class="login-btn" id="login-btn" onclick="fazerLogin()">Entrar no sistema</button>
+      <div class="login-error" id="login-error"></div>
+
+      <div class="login-dev">
+        <div class="login-dev-title">Acesso rápido — desenvolvimento</div>
+        <button class="dev-btn" onclick="loginDev('pro')">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <rect x="1" y="1" width="6" height="6" rx="2" fill="#00c48c" />
+            <rect x="9" y="1" width="6" height="6" rx="2" fill="rgba(0,196,140,0.4)" />
+            <rect x="1" y="9" width="6" height="6" rx="2" fill="rgba(0,196,140,0.4)" />
+            <rect x="9" y="9" width="6" height="6" rx="2" fill="rgba(0,196,140,0.4)" />
+          </svg>
+          Dr. Paulo Ramos — Proprietário
+          <span class="dev-badge db-pro">PRO</span>
+        </button>
+        <button class="dev-btn" onclick="loginDev('desktop')">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <circle cx="8" cy="6" r="3.5" stroke="#4f9eff" stroke-width="1.3" />
+            <path d="M2 14c0-2.5 2.5-4.5 6-4.5s6 2 6 4.5" stroke="#4f9eff" stroke-width="1.3" stroke-linecap="round" />
+          </svg>
+          Dr. Rafael Costa — Dentista
+          <span class="dev-badge db-desk">DESKTOP</span>
+        </button>
+        <button class="dev-btn" onclick="loginDev('secretaria')">
+          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
+            <rect x="2" y="3" width="12" height="10" rx="2" stroke="#ff9f2e" stroke-width="1.3" />
+            <path d="M5 1v4M11 1v4M2 7h12" stroke="#ff9f2e" stroke-width="1.3" stroke-linecap="round" />
+          </svg>
+          Ana Nunes — Secretária
+          <span class="dev-badge db-sec">SECRETARIA</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+     APP SHELL
+════════════════════════════════════════ -->
+  <div id="app">
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="tb-logo">
+        <div class="tb-logo-ico">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 3C8.5 3 6 5 6 8c0 2 1 3.5 2.5 4.5C5 14 3 17 3 20h18c0-3-2-6-5.5-7.5C17 11.5 18 10 18 8c0-3-2.5-5-6-5z"
+              stroke="#00c48c" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
+        OdontoFlow Pro
+        <span class="tb-pill" id="tb-perfil-pill">PRO</span>
+      </div>
+
+      <div class="tb-search">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none">
+          <circle cx="6.5" cy="6.5" r="5.5" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" />
+          <path d="M11 11l3.5 3.5" stroke="rgba(255,255,255,0.25)" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+        <input type="text" placeholder="Buscar pacientes..." id="busca-global" oninput="filtrarAgenda(this.value)">
+      </div>
+
+      <div class="clima-badge normal" id="clima-badge">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" id="clima-ico-svg">
+          <circle cx="8" cy="8" r="4" stroke="rgba(255,255,255,0.4)" stroke-width="1.3" />
+        </svg>
+        <div class="clima-txt">
+          <div class="clima-main" id="clima-main">Carregando...</div>
+          <div class="clima-sub" id="clima-sub">Open-Meteo</div>
+        </div>
+      </div>
+
+      <div class="sse-badge online" id="sse-badge">
+        <div class="sse-dot-wrap">
+          <div class="sse-ping"></div>
+          <div class="sse-dot"></div>
+        </div>
+        <span id="sse-label">SSE ativo</span>
+      </div>
+
+      <div class="db-mode-badge" id="db-resilience-badge" style="display:none">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none">
+          <path d="M8 2L1.5 13.5h13L8 2z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" />
+          <path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" />
+        </svg>
+        Modo Resiliência · SQLite
+      </div>
+
+      <div class="tb-right">
+        <div class="tb-icon-btn sync-spin" id="sync-btn" title="Sync Supabase" style="display:none">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <path d="M2 8a6 6 0 016-6 6 6 0 014.24 1.76L14 2" stroke="#ff9f2e" stroke-width="1.4"
+              stroke-linecap="round" />
+            <path d="M14 8a6 6 0 01-6 6 6 6 0 01-4.24-1.76L2 14" stroke="#ff9f2e" stroke-width="1.4"
+              stroke-linecap="round" />
+          </svg>
+          <div class="sync-count" id="sync-count">0</div>
+        </div>
+        <div class="tb-icon-btn" title="Notificações">
+          <svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1.5a5 5 0 00-5 5v2.5l-1.5 2H14.5L13 9V6.5a5 5 0 00-5-5zM6.5 13a1.5 1.5 0 003 0"
+              stroke="rgba(255,255,255,0.45)" stroke-width="1.3" stroke-linecap="round" />
+          </svg>
+          <div class="tb-notif-dot"></div>
+        </div>
+        <button class="tb-avatar" id="tb-avatar" style="background:var(--pro);color:#000">PR</button>
+      </div>
+    </div>
+
+    <!-- APP BODY -->
+    <div class="app-body">
+
+      <!-- SIDEBAR -->
+      <div class="sidebar" id="sidebar">
+        <div class="sb-section">Principal</div>
+        <div class="sb-item" id="sb-painel" onclick="navTo('painel')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <rect x="1" y="1" width="6" height="6" rx="2" fill="currentColor" />
+              <rect x="9" y="1" width="6" height="6" rx="2" fill="currentColor" opacity=".4" />
+              <rect x="1" y="9" width="6" height="6" rx="2" fill="currentColor" opacity=".4" />
+              <rect x="9" y="9" width="6" height="6" rx="2" fill="currentColor" opacity=".4" />
+            </svg></div>
+          <span class="sb-lbl">Painel</span>
+        </div>
+        <div class="sb-item" id="sb-agenda" onclick="navTo('agenda')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="3" width="12" height="10" rx="2" stroke="currentColor" stroke-width="1.3" />
+              <path d="M5 1v4M11 1v4M2 7h12" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+            </svg></div>
+          <span class="sb-lbl">Agenda</span>
+          <span class="sb-badge sb-badge-n" id="sb-badge-agenda">5</span>
+        </div>
+        <div class="sb-item" onclick="navTo('pacientes')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="6" r="3.5" stroke="currentColor" stroke-width="1.3" />
+              <path d="M2 14c0-2.5 2.5-4.5 6-4.5s6 2 6 4.5" stroke="currentColor" stroke-width="1.3"
+                stroke-linecap="round" />
+            </svg></div>
+          <span class="sb-lbl">Pacientes</span>
+        </div>
+        <div class="sb-item" onclick="navTo('historico')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <path d="M8 2v5l3 2" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              <circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3" />
+            </svg></div>
+          <span class="sb-lbl">Histórico</span>
+        </div>
+
+        <div class="sb-section sb-clinico">Clínico</div>
+        <div class="sb-item sb-clinico" onclick="navTo('prontuarios')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <path d="M3 5h10M3 8h7M3 11h5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              <rect x="1" y="2" width="14" height="12" rx="2" stroke="currentColor" stroke-width="1.3" />
+            </svg></div>
+          <span class="sb-lbl">Prontuários</span>
+        </div>
+        <div class="sb-item sb-clinico" id="sb-prescricoes" onclick="navTo('prescricoes')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <rect x="2" y="2" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.3" />
+              <path d="M5 8h6M8 5v6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+            </svg></div>
+          <span class="sb-lbl">Prescrições</span>
+          <span class="sb-badge sb-badge-r">2</span>
+        </div>
+
+        <div class="sb-section sb-gestao">Gestão PRO</div>
+        <div class="sb-item sb-gestao" id="sb-financeiro" onclick="navTo('financeiro')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <path d="M2 12l4-4 3 3 4-5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" />
+              <rect x="1" y="1" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.3" />
+            </svg></div>
+          <span class="sb-lbl">Financeiro</span>
+          <span class="sb-badge sb-badge-g">PRO</span>
+        </div>
+        <div class="sb-item sb-gestao" id="sb-equipe" onclick="navTo('equipe')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <circle cx="6" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3" />
+              <circle cx="11" cy="5" r="2.5" stroke="currentColor" stroke-width="1.3" />
+              <path d="M1 14c.5-3 2.5-4.5 5-4.5s4.5 1.5 5 4.5" stroke="currentColor" stroke-width="1.3"
+                stroke-linecap="round" />
+            </svg></div>
+          <span class="sb-lbl">Equipe</span>
+        </div>
+        <div class="sb-item sb-gestao" id="sb-config" onclick="navTo('config')">
+          <div class="sb-ico"><svg width="13" height="13" viewBox="0 0 16 16" fill="none">
+              <circle cx="8" cy="8" r="2.5" stroke="currentColor" stroke-width="1.3" />
+              <path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2" stroke="currentColor" stroke-width="1.3"
+                stroke-linecap="round" />
+            </svg></div>
+          <span class="sb-lbl">Configurações</span>
+        </div>
+
+        <div class="sb-footer">
+          <div class="sb-user">
+            <div class="sb-user-av" id="sb-user-av" style="background:var(--pro);color:#000">PR</div>
+            <div>
+              <div class="sb-user-name" id="sb-user-name">Dr. Paulo Ramos</div>
+              <div class="sb-user-role" id="sb-user-role">Proprietário · PRO</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div class="main-content" id="main-content">
+
+        <!-- CÁPSULA FLUTUANTE -->
+        <div class="capsule" id="capsule">
+          <button class="cap-btn" style="background:#25D366" title="WhatsApp" onclick="abrirWhatsApp()">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.417A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z"
+                fill="rgba(255,255,255,0.92)" />
+              <path
+                d="M9.5 8.5c.2.7 1.2 2.3 2 3.1.8.8 2.4 1.8 3.1 2 .3.1.6 0 .8-.2l.6-.8c.1-.2.4-.3.6-.2l2 .9c.2.1.3.4.2.6-.4 1.2-1.5 2.1-2.8 2-1.3-.1-4.2-1.3-5.8-2.9-1.6-1.6-2.8-4.5-2.9-5.8-.1-1.3.8-2.4 2-2.8.2-.1.5 0 .6.2l.9 2c.1.2 0 .5-.2.6l-.8.6c-.2.2-.3.5-.2.7z"
+                fill="#1a1a1a" />
+            </svg>
+          </button>
+          <button class="cap-btn" style="background:#EA4335" title="Localização">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <path fill-rule="evenodd" clip-rule="evenodd"
+                d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+                fill="rgba(255,255,255,0.95)" />
+            </svg>
+          </button>
+          <button class="cap-btn" style="background:#4285F4" title="Agenda rápida" onclick="navTo('agenda')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <rect x="3" y="4" width="18" height="17" rx="3" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" />
+              <path d="M8 2v4M16 2v4M3 9h18" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+          </button>
+          <div class="cap-sep"></div>
+          <button class="cap-btn cap-clinico" style="background:#FF9800" title="Prontuários"
+            onclick="navTo('prontuarios')">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <rect x="4" y="2" width="16" height="20" rx="3" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" />
+              <path d="M8 7h8M8 12h8M8 17h5" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" stroke-linecap="round" />
+            </svg>
+          </button>
+          <button class="cap-btn cap-clinico" style="background:#9C27B0" title="Videochamada">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+              <rect x="2" y="6" width="14" height="12" rx="3" stroke="rgba(255,255,255,0.9)" stroke-width="1.8" />
+              <path d="M16 10l6-4v12l-6-4V10z" stroke="rgba(255,255,255,0.9)" stroke-width="1.8"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+          <div class="cap-sep"></div>
+          <button class="cap-btn cap-gestao"
+            style="background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.09)" title="Configurações"
+            onclick="navTo('config')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="3" stroke="rgba(255,255,255,0.35)" stroke-width="1.6" />
+              <path d="M12 2v3M12 19v3M2 12h3M19 12h3" stroke="rgba(255,255,255,0.35)" stroke-width="1.6"
+                stroke-linecap="round" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- CONTEÚDO DINÂMICO -->
+        <div id="page-content"></div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════
+     JAVASCRIPT — LÓGICA COMPLETA
+════════════════════════════════════════ -->
+  <script>
+    /* ══════════════════════════════════════
+       ESTADO GLOBAL
+    ══════════════════════════════════════ */
+    const API_URLS = ['http://127.0.0.1:5000', 'http://localhost:5000'];
+    let activeAPI = API_URLS[0];
+
+    async function apiFetch(endpoint, options = {}) {
+      try {
+        const res = await fetch(`${activeAPI}${endpoint}`, options);
+        if (res.ok || res.status >= 400) return res;
+        throw new Error(`HTTP ${res.status}`);
+      } catch (e) {
+        if (activeAPI === API_URLS[0]) {
+          console.warn('[OdontoFlow] 127.0.0.1 falhou, recuando para localhost...');
+          activeAPI = API_URLS[1];
+          return fetch(`${activeAPI}${endpoint}`, options);
+        }
+        throw e;
+      }
+    }
+
+    let TOKEN = null;
+    let PERFIL = null;
+    let USUARIO = null;
+    let evtSource = null;
+    let agendamentosCache = [];
+    let climaCache = null;
+    let healthCache = null;
+    let syncPending = 0;
+    let dataAtual = new Date().toISOString().split('T')[0];
+
+    /* ══════════════════════════════════════
+       ÍCONES SVG INLINE
+    ══════════════════════════════════════ */
+    const ICONS = {
+      warn: `<svg width="12" height="12" viewBox="0 0 16 16" fill="none"><path d="M8 1.5L1.5 13.5h13L8 1.5z" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M8 6v4M8 11.5v.5" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>`,
+      check: `<svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M2.5 8l4 4 7-7" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>`,
+      wa: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M12 2C6.477 2 2 6.477 2 12c0 1.89.525 3.66 1.438 5.168L2 22l4.978-1.417A9.956 9.956 0 0012 22c5.523 0 10-4.477 10-10S17.523 2 12 2z" fill="rgba(255,255,255,0.92)"/><path d="M9.5 8.5c.2.7 1.2 2.3 2 3.1.8.8 2.4 1.8 3.1 2 .3.1.6 0 .8-.2l.6-.8c.1-.2.4-.3.6-.2l2 .9c.2.1.3.4.2.6-.4 1.2-1.5 2.1-2.8 2-1.3-.1-4.2-1.3-5.8-2.9-1.6-1.6-2.8-4.5-2.9-5.8-.1-1.3.8-2.4 2-2.8.2-.1.5 0 .6.2l.9 2c.1.2 0 .5-.2.6l-.8.6c-.2.2-.3.5-.2.7z" fill="#1a1a1a"/></svg>`,
+      ia: `<svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="3" stroke="currentColor" stroke-width="1.3"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M3.4 12.6l1.4-1.4M11.2 4.8l1.4-1.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>`
+    };
+
+    /* ══════════════════════════════════════
+       LOGIN
+    ══════════════════════════════════════ */
+    async function fazerLogin() {
+      const email = document.getElementById('login-email').value.trim();
+      const senha = document.getElementById('login-senha').value;
+      const btn = document.getElementById('login-btn');
+      const err = document.getElementById('login-error');
+
+      if (!email || !senha) { err.textContent = 'Preencha e-mail e senha.'; return; }
+
+      btn.disabled = true;
+      btn.textContent = 'Conectando...';
+      err.textContent = '';
+
+      try {
+        const res = await apiFetch(`/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, senha })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.erro || 'Erro no login');
+
+        iniciarApp(data.token, data.perfil, data.nome);
+      } catch (e) {
+        err.textContent = e.message || 'Servidor Offline. Usando modo de emergência?';
+        btn.disabled = false;
+        btn.textContent = 'Entrar no sistema';
+      }
+    }
+
+    function loginDev(perfil) {
+      const MOCK = 'MOCK_JWT_PRO_EDGE_TOKEN';
+      const usuarios = {
+        pro: { token: MOCK, perfil: 'pro', nome: 'Dr. Paulo Ramos' },
+        desktop: { token: MOCK, perfil: 'desktop', nome: 'Dr. Rafael Costa' },
+        secretaria: { token: MOCK, perfil: 'secretaria', nome: 'Ana Nunes' }
+      };
+      const u = usuarios[perfil];
+      iniciarApp(u.token, u.perfil, u.nome);
+    }
+
+    document.getElementById('login-senha').addEventListener('keydown', e => {
+      if (e.key === 'Enter') fazerLogin();
+    });
+
+    /* ══════════════════════════════════════
+       INICIALIZAÇÃO DO APP
+    ══════════════════════════════════════ */
+    function iniciarApp(token, perfil, nome) {
+      TOKEN = token;
+      PERFIL = perfil;
+      USUARIO = nome;
+
+      document.getElementById('login-screen').style.display = 'none';
+      const app = document.getElementById('app');
+      app.classList.add('visible');
+
+      aplicarPerfil();
+      conectarReatorSSE();
+      verificarHealth();
+      fetchAgenda();
+      navTo('painel');
+
+      // Poll health a cada 30s
+      setInterval(verificarHealth, 30000);
+    }
+
+    /* ══════════════════════════════════════
+       PERFIL — SIDEBAR + TOPBAR
+    ══════════════════════════════════════ */
+    function aplicarPerfil() {
+      const pill = document.getElementById('tb-perfil-pill');
+      const av = document.getElementById('tb-avatar');
+      const sbAv = document.getElementById('sb-user-av');
+      const sbNome = document.getElementById('sb-user-name');
+      const sbRole = document.getElementById('sb-user-role');
+
+      const initials = USUARIO.split(' ').slice(0, 2).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+
+      pill.className = 'tb-pill tb-pill-' + PERFIL;
+      pill.textContent = { pro: 'PRO', desktop: 'DESKTOP', secretaria: 'SECRETARIA' }[PERFIL];
+
+      const cores = { pro: 'var(--pro)', desktop: 'var(--desk)', secretaria: 'var(--sec)' };
+      av.style.background = cores[PERFIL];
+      av.style.color = '#000';
+      av.textContent = initials;
+      sbAv.style.background = cores[PERFIL];
+      sbAv.textContent = initials;
+      sbNome.textContent = USUARIO;
+      sbRole.textContent = { pro: 'Proprietário · PRO', desktop: 'Dentista · Desktop', secretaria: 'Secretária' }[PERFIL];
+
+      // Mostrar/esconder sidebar items
+      const activeClass = 'active-pro'; // default para highlight
+      document.getElementById('sb-painel').className = 'sb-item ' + 'active-' + PERFIL;
+
+      if (PERFIL === 'secretaria') {
+        document.querySelectorAll('.sb-gestao, .sb-clinico').forEach(el => {
+          if (el.tagName === 'DIV') el.classList.add('locked');
+        });
+        document.querySelectorAll('.sb-gestao').forEach(el => {
+          const lock = el.querySelector('.sb-lock') || document.createElement('span');
+          lock.className = 'sb-lock';
+          lock.textContent = '🔒';
+          if (!el.querySelector('.sb-lock')) el.appendChild(lock);
+        });
+        document.getElementById('sb-prescricoes').classList.add('locked');
+      } else if (PERFIL === 'desktop') {
+        ['sb-financeiro', 'sb-equipe', 'sb-config'].forEach(id => {
+          const el = document.getElementById(id);
+          el.classList.add('locked');
+          const lock = document.createElement('span');
+          lock.className = 'sb-lock'; lock.textContent = '🔒 PRO';
+          el.appendChild(lock);
+        });
+      }
+
+      // Cápsula — esconder botões por perfil
+      if (PERFIL === 'secretaria') {
+        document.querySelectorAll('.cap-clinico, .cap-gestao').forEach(b => b.classList.add('disabled'));
+      } else if (PERFIL === 'desktop') {
+        document.querySelectorAll('.cap-gestao').forEach(b => b.classList.add('disabled'));
+      }
+
+      // Sync icon — só PRO
+      if (PERFIL === 'pro') {
+        document.getElementById('sync-btn').style.display = 'flex';
+      }
+    }
+
+    /* ══════════════════════════════════════
+       SSE — REATOR SSE
+    ══════════════════════════════════════ */
+    function conectarReatorSSE() {
+      if (evtSource) { evtSource.close(); evtSource = null; }
+
+      try {
+        evtSource = new EventSource(`${activeAPI}/stream`);
+
+        evtSource.onopen = () => {
+          atualizarSSEBadge(true);
+        };
+
+        evtSource.onmessage = (e) => {
+          try {
+            const msg = JSON.parse(e.data);
+            if (msg.evento === 'agenda_updated') {
+              fetchAgenda();
+              mostrarToast('Agenda atualizada via SSE', 'ok');
+            }
+          } catch (_) { }
+        };
+
+        evtSource.onerror = () => {
+          evtSource.close();
+          atualizarSSEBadge(false);
+          setTimeout(conectarReatorSSE, 5000);
+          // fallback via polling curto em caso de queda do Flask
+          setTimeout(fetchAgenda, 10000);
+        };
+      } catch (e) {
+        atualizarSSEBadge(false);
+      }
+    }
+
+    function atualizarSSEBadge(online) {
+      const badge = document.getElementById('sse-badge');
+      const label = document.getElementById('sse-label');
+      if (online) {
+        badge.className = 'sse-badge online';
+        label.textContent = 'SSE ativo';
+      } else {
+        badge.className = 'sse-badge offline';
+        label.textContent = 'SSE offline';
+      }
+    }
+
+    /* ══════════════════════════════════════
+       HEALTH CHECK
+    ══════════════════════════════════════ */
+    async function verificarHealth() {
+      try {
+        const res = await apiFetch(`/health`, { signal: AbortSignal.timeout(2000) });
+        const data = await res.json();
+        healthCache = data;
+
+        // DB Mode
+        if (data.db_mode === 'sqlite') {
+          document.getElementById('db-resilience-badge').style.display = 'flex';
+          mostrarToast('Alerta: Operando em Backup SQLite', 'warn');
+        } else {
+          document.getElementById('db-resilience-badge').style.display = 'none';
+        }
+
+        // Sync queue
+        if (data.sync_pending && data.sync_pending > 0) {
+          syncPending = data.sync_pending;
+          document.getElementById('sync-count').textContent = syncPending;
+        }
+
+        atualizarSseBar(true, data);
+      } catch (e) {
+        atualizarSseBar(false, null);
+      }
+    }
+
+    function atualizarSseBar(online, data) {
+      const bar = document.getElementById('sse-status-bar');
+      if (!bar) return;
+      if (online) {
+        bar.className = 'sse-bar';
+        bar.querySelector('.sse-bar-txt').textContent = `Reator SSE conectado · ${data?.sync_pending || 0} registro(s) aguardando sync`;
+        bar.querySelector('.sse-bar-right').textContent = `Docker :5433 · ${data?.db_mode || 'postgres'}`;
+      } else {
+        bar.className = 'sse-bar offline-bar';
+        bar.querySelector('.sse-bar-txt').textContent = 'Sistema local indisponível — dados em cache';
+        bar.querySelector('.sse-bar-right').textContent = 'offline';
+      }
+    }
+
+    /* ══════════════════════════════════════
+       FETCH AGENDA — GET /agenda
+    ══════════════════════════════════════ */
+    async function fetchAgenda(data = dataAtual) {
+      try {
+        const res = await apiFetch(`/agenda?data=${data}`, {
+          headers: { 'Authorization': `Bearer ${TOKEN}` },
+          signal: AbortSignal.timeout(5000)
+        });
+
+        if (res.status === 401 || res.status === 403) {
+          mostrarToast('Sessão expirada. Faça login novamente.', 'erro');
+          return location.reload();
+        }
+        if (!res.ok) throw new Error('Falha HTTP');
+
+        const json = await res.json();
+
+        climaCache = json.clima;
+        agendamentosCache = json.agendamentos || [];
+        atualizarClima(json.clima);
+        renderizarPagina();
+
+      } catch (e) {
+        // Offline — manter cache, mostrar badge
+        atualizarSSEBadge(false);
+        if (agendamentosCache.length === 0) {
+          agendamentosCache = getDadosMock();
+          climaCache = getClimaMock();
+          atualizarClima(climaCache);
+          renderizarPagina();
+        }
+      }
+    }
+
+    /* ══════════════════════════════════════
+       CLIMA
+    ══════════════════════════════════════ */
+    function atualizarClima(clima) {
+      if (!clima) return;
+      const badge = document.getElementById('clima-badge');
+      const main = document.getElementById('clima-main');
+      const sub = document.getElementById('clima-sub');
+
+      main.textContent = `${clima.icone || '🌤'} ${clima.temperatura || '--'}°C · ${clima.descricao || ''}`;
+      sub.textContent = clima.alerta_agenda ? 'Impacto na agenda' : 'Open-Meteo · cache 20min';
+
+      badge.className = 'clima-badge ' + (clima.alerta_agenda ? 'alerta' : 'normal');
+      if (clima.alerta_agenda) {
+        main.style.color = 'var(--warn)';
+      } else {
+        main.style.color = 'var(--txt)';
+      }
+    }
+
+    /* ══════════════════════════════════════
+       NAVEGAÇÃO
+    ══════════════════════════════════════ */
+    function navTo(pagina) {
+      document.querySelectorAll('.sb-item').forEach(el => {
+        el.classList.remove('active-pro', 'active-desk', 'active-sec');
+      });
+      const map = {
+        painel: 'sb-painel', agenda: 'sb-agenda',
+        pacientes: null, historico: null,
+        prontuarios: null, prescricoes: 'sb-prescricoes',
+        financeiro: 'sb-financeiro', equipe: 'sb-equipe', config: 'sb-config'
+      };
+      if (map[pagina]) {
+        const el = document.getElementById(map[pagina]);
+        if (el) el.classList.add('active-' + PERFIL);
+      }
+      renderizarPagina(pagina);
+    }
+
+    let paginaAtual = 'painel';
+    function renderizarPagina(pagina) {
+      if (pagina) paginaAtual = pagina;
+      const container = document.getElementById('page-content');
+      switch (paginaAtual) {
+        case 'painel': container.innerHTML = renderPainel(); break;
+        case 'agenda': container.innerHTML = renderAgendaPage(); break;
+        default: container.innerHTML = renderPainel(); break;
+      }
+      bindEvents();
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — PAINEL
+    ══════════════════════════════════════ */
+    function renderPainel() {
+      const hoje = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'short', year: 'numeric' });
+      const fabClass = `fab fab-${PERFIL}`;
+      const tabActClass = `tab-btn active-${PERFIL}`;
+
+      // Verifica alto risco
+      const altosRiscos = agendamentosCache.filter(a => a.risco_falta?.nivel === 'ALTO' && a.risco_falta?.exigir_sinal);
+      const lockedPRO = agendamentosCache.filter(a => a.locked_by_pro);
+
+      // Métricas
+      const totalHoje = agendamentosCache.length;
+      const confirmados = agendamentosCache.filter(a => ['CONFIRMADO', 'PAGO', 'SINAL'].includes(a.status)).length;
+      const emEspera = agendamentosCache.filter(a => a.status === 'AGUARDANDO').length;
+
+      let html = `
+  <div class="page-header">
+    <div>
+      <div class="page-title">Painel Geral</div>
+      <div class="page-sub">${hoje.charAt(0).toUpperCase() + hoje.slice(1)} · Motor V14 ativo · Open-Meteo cache 20min</div>
+    </div>
+    ${PERFIL !== 'secretaria' ? `<button class="${fabClass}" onclick="navTo('agenda')">
+      <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#000" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Novo agendamento
+    </button>` : `<button class="${fabClass}" onclick="navTo('agenda')">
+      <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#000" stroke-width="2.2" stroke-linecap="round"/></svg>
+      Agendar paciente
+    </button>`}
+  </div>
+
+  <div class="sse-bar" id="sse-status-bar">
+    <div class="sse-dot-wrap" style="flex-shrink:0;color:var(--pro)">
+      <div class="sse-ping"></div>
+      <div class="sse-dot"></div>
+    </div>
+    <span class="sse-bar-txt">Reator SSE conectado · ${syncPending} registro(s) aguardando sync com Supabase</span>
+    <span class="sse-bar-right">Docker :5433 · postgres</span>
+  </div>
+
+  ${altosRiscos.length > 0 ? renderRiskOverlay(altosRiscos[0]) : ''}
+
+  <div class="metrics-grid ${PERFIL === 'secretaria' ? 'three' : ''}">
+    <div class="metric-card">
+      <div class="metric-label">Consultas hoje</div>
+      <div class="metric-value">${totalHoje || 9}</div>
+      <div class="metric-delta up">+3 vs ontem</div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-label">Pacientes ativos</div>
+      <div class="metric-value">218</div>
+      <div class="metric-delta up">+8 este mês</div>
+    </div>
+    ${PERFIL !== 'secretaria' ? `
+    <div class="metric-card">
+      <div class="metric-label">Faturamento hoje</div>
+      <div class="metric-value" style="font-size:16px">R$1.840</div>
+      <div class="metric-delta up">+12%</div>
+    </div>` : ''}
+    <div class="metric-card">
+      <div class="metric-label">${PERFIL === 'secretaria' ? 'Confirmados' : 'A receber'}</div>
+      <div class="metric-value" style="font-size:${PERFIL === 'secretaria' ? '20' : '16'}px">${PERFIL === 'secretaria' ? confirmados : 'R$3.200'}</div>
+      <div class="metric-delta ${PERFIL === 'secretaria' ? 'up' : 'dn'}">${PERFIL === 'secretaria' ? `de ${totalHoje}` : '2 em atraso'}</div>
+    </div>
+  </div>
+
+  <div class="content-grid">
+    <div class="left-col">
+      ${PERFIL === 'secretaria' && lockedPRO.length > 0 ? `
+      <div class="sec-locked-banner">
+        <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v4M8 11.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+        ${lockedPRO.length} horário(s) bloqueado(s) pelo PRO — somente o proprietário pode alterar
+      </div>` : ''}
+
+      <div class="card">
+        <div class="card-title">Agenda de hoje</div>
+        <div class="tabs-row">
+          <button class="${tabActClass}">Hoje</button>
+          <button class="tab-btn">Esta semana</button>
+        </div>
+        <div class="agenda-list" id="agenda-list-painel">
+          ${renderSlots(agendamentosCache)}
+        </div>
+      </div>
+
+      ${PERFIL === 'pro' ? renderFinanceiro() : ''}
+    </div>
+
+    <div class="right-col">
+      ${renderPacienteCard()}
+      ${renderSystemStatus()}
+      ${PERFIL === 'pro' ? renderOutbox() : ''}
+    </div>
+  </div>`;
+
+      return html;
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — AGENDA (PÁGINA COMPLETA)
+    ══════════════════════════════════════ */
+    function renderAgendaPage() {
+      const hoje = new Date().toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'short' });
+      const tabActClass = `tab-btn active-${PERFIL}`;
+      const fabClass = `fab fab-${PERFIL}`;
+      const lockedPRO = agendamentosCache.filter(a => a.locked_by_pro);
+
+      return `
+  <div class="page-header">
+    <div>
+      <div class="page-title">Agenda</div>
+      <div class="page-sub">${hoje.charAt(0).toUpperCase() + hoje.slice(1)} · ${agendamentosCache.length} agendamentos</div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <input type="date" id="data-picker" value="${dataAtual}"
+        style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:7px 12px;color:var(--txt);font-size:11px;outline:none;cursor:pointer"
+        onchange="mudarData(this.value)">
+      <button class="${fabClass}" onclick="novoAgendamento()">
+        <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M8 2v12M2 8h12" stroke="#000" stroke-width="2.2" stroke-linecap="round"/></svg>
+        Novo agendamento
+      </button>
+    </div>
+  </div>
+
+  <div class="sse-bar" id="sse-status-bar">
+    <div class="sse-dot-wrap" style="flex-shrink:0;color:var(--pro)">
+      <div class="sse-ping"></div>
+      <div class="sse-dot"></div>
+    </div>
+    <span class="sse-bar-txt">SSE ativo · agenda sincronizada em tempo real</span>
+    <span class="sse-bar-right">Docker :5433</span>
+  </div>
+
+  ${PERFIL === 'secretaria' && lockedPRO.length > 0 ? `
+  <div class="sec-locked-banner">
+    <svg width="11" height="11" viewBox="0 0 16 16" fill="none"><circle cx="8" cy="8" r="6.5" stroke="currentColor" stroke-width="1.3"/><path d="M8 5v4M8 11.5v.5" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+    ${lockedPRO.length} horário(s) bloqueado(s) pelo PRO — somente o proprietário pode alterar
+  </div>` : ''}
+
+  <div class="card">
+    <div class="tabs-row">
+      <button class="${tabActClass}">Hoje</button>
+      <button class="tab-btn">Esta semana</button>
+      <button class="tab-btn">Este mês</button>
+    </div>
+    <div class="agenda-list" id="agenda-list-full">
+      ${renderSlots(agendamentosCache, true)}
+    </div>
+  </div>`;
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — SLOTS DE AGENDA
+    ══════════════════════════════════════ */
+    function renderSlots(agendamentos, fullView = false) {
+      if (!agendamentos || agendamentos.length === 0) {
+        return `<div style="text-align:center;padding:24px;color:var(--txt3);font-size:11px">Nenhum agendamento para hoje</div>`;
+      }
+
+      return agendamentos.map((a, i) => {
+        const risco = a.risco_falta || { nivel: 'BAIXO', score: 0, cor: '#00c48c', fatores: [], exigir_sinal: false };
+        const isLocked = a.locked_by_pro && PERFIL !== 'pro';
+        const isAlto = risco.nivel === 'ALTO';
+        const isMedio = risco.nivel === 'MEDIO';
+
+        const slotClass = isLocked ? 'agenda-slot locked-slot'
+          : isAlto ? 'agenda-slot risk-alto'
+            : 'agenda-slot';
+
+        const [hora, periodo] = formatarHora(a.horario);
+        const avClass = ['av-blue', 'av-green', 'av-purple', 'av-orange', 'av-red'][i % 5];
+        const initials = (a.paciente || 'P').split(' ').slice(0, 2).map(w => w[0]).join('').slice(0, 2);
+
+        const statusPill = renderStatusPill(a.status);
+        const scoreBadge = isAlto
+          ? `<div class="score-badge score-alto">${ICONS.warn} ${risco.score}</div>`
+          : isMedio
+            ? `<div class="score-badge score-medio">${risco.score}</div>`
+            : '';
+
+        const waDisabled = !a.whatsapp_link ? 'disabled' : '';
+        const waTitle = a.whatsapp_link ? `Enviar lembrete — ${a.paciente} · ${a.horario}` : 'Telefone não cadastrado';
+
+        const sugestaoIA = (isAlto && risco.sugestao_ia && PERFIL !== 'secretaria') ? `
+      <div style="margin-top:4px;padding:5px 8px;background:rgba(79,158,255,0.07);border:1px solid rgba(79,158,255,0.15);border-radius:7px">
+        <div style="font-size:8px;color:var(--desk);font-weight:700;margin-bottom:2px">${ICONS.ia} Motor V14</div>
+        <div style="font-size:8px;color:var(--txt3)">Paciente: <span style="color:var(--txt2)">${risco.sugestao_ia.vetor_paciente}</span></div>
+        <div style="font-size:8px;color:var(--txt3)">Clínica: <span style="color:var(--txt2)">${risco.sugestao_ia.vetor_clinica}</span></div>
+      </div>` : '';
+
+        const lockedNote = a.locked_by_pro
+          ? `<span style="font-size:8px;color:var(--warn);font-weight:700"> · PRO</span>` : '';
+
+        const climaIco = climaCache?.alerta_agenda
+          ? `<span title="Clima: ${climaCache?.descricao}" style="font-size:10px;margin-left:4px;cursor:help">🌧</span>` : '';
+
+        return `
+    <div class="${slotClass}" data-id="${a.id || i}" data-risco="${risco.nivel}" data-exigir="${risco.exigir_sinal}"
+      ${isLocked ? '' : `onclick="abrirModalAgendamento(${JSON.stringify(a).replace(/"/g, '&quot;')})"`}>
+      <div class="slot-time">
+        <div class="slot-hora">${hora}${climaIco}</div>
+        <div class="slot-periodo">${periodo}</div>
+      </div>
+      <div class="slot-body">
+        <div class="slot-av ${avClass}">${initials}</div>
+        <div class="slot-info">
+          <div class="slot-name">${a.paciente || 'Paciente'}${lockedNote}</div>
+          <div class="slot-proc">${a.procedimento || ''} · ${a.convenio || 'Particular'}</div>
+          <div class="risk-bar-wrap">
+            <div class="risk-bar" style="width:${risco.score || 0}%;background:${risco.cor || '#00c48c'}"></div>
+          </div>
+          ${sugestaoIA}
+        </div>
+      </div>
+      <div class="slot-actions">
+        <button class="wa-btn ${waDisabled}" title="${waTitle}"
+          onclick="${a.whatsapp_link ? `window.open('${a.whatsapp_link}','_blank')` : 'void(0)'};event.stopPropagation()">
+          ${ICONS.wa}
+        </button>
+        ${isLocked ? `<div class="status-pill pill-lock">🔒 PRO</div>`
+            : isAlto && risco.exigir_sinal ? `<div class="score-badge score-alto" onclick="abrirConfirmacao('${a.id || i}', event)">${ICONS.warn} ${risco.score}</div>`
+              : scoreBadge || statusPill}
+      </div>
+    </div>
+    ${i < agendamentos.length - 1 ? '<hr class="agenda-sep">' : ''}`;
+      }).join('');
+    }
+
+    function formatarHora(horario) {
+      if (!horario) return ['--:--', 'AM'];
+      const [h] = horario.split(':').map(Number);
+      return [horario, h < 12 ? 'AM' : 'PM'];
+    }
+
+    function renderStatusPill(status) {
+      const map = {
+        'CONFIRMADO': '<div class="status-pill pill-ok">Confirmado</div>',
+        'PAGO': '<div class="status-pill pill-pago">' + ICONS.check + ' Pago</div>',
+        'SINAL': '<div class="status-pill pill-sinal">Sinal</div>',
+        'CANCELADO': '<div class="status-pill" style="background:rgba(255,255,255,0.05);color:var(--txt3)">Cancelado</div>',
+        'AGUARDANDO': '<div class="status-pill pill-wait">Aguardando</div>',
+        'EM_ANDAMENTO': '<div class="status-pill pill-live"><div class="live-dot"></div>Ao vivo</div>',
+      };
+      return map[status] || map['AGUARDANDO'];
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — RISK OVERLAY
+    ══════════════════════════════════════ */
+    function renderRiskOverlay(a) {
+      const risco = a.risco_falta;
+      const fatores = (risco.fatores || []).map(f =>
+        `<div class="risk-factor"><div class="risk-dot"></div>${f}</div>`
+      ).join('');
+
+      const ia = risco.sugestao_ia && PERFIL !== 'secretaria' ? `
+    <div class="risk-ia-block">
+      <div class="risk-ia-title">${ICONS.ia} Recomendação Motor V14</div>
+      <div class="risk-ia-row"><span class="risk-ia-lbl">Ideal para o paciente:</span> ${risco.sugestao_ia.vetor_paciente}</div>
+      <div class="risk-ia-row"><span class="risk-ia-lbl">Ideal para a clínica:</span> ${risco.sugestao_ia.vetor_clinica}</div>
+    </div>` : '';
+
+      return `
+  <div class="risk-overlay" id="risk-overlay-${a.id}">
+    <div class="risk-header">
+      ${ICONS.warn}
+      <span class="risk-title">Alto risco de falta — ${a.paciente} · ${a.horario}</span>
+      <span class="risk-score-pill">Score ${risco.score}</span>
+    </div>
+    <div class="risk-factors">${fatores}</div>
+    ${ia}
+    <div class="risk-actions">
+      <button class="risk-btn-pix" onclick="confirmarSlot('${a.id}','exigir_sinal')">
+        Exigir sinal no PIX antes de confirmar
+      </button>
+      <button class="risk-btn-skip" onclick="confirmarSlot('${a.id}','confirmar')">
+        Confirmar mesmo assim
+      </button>
+    </div>
+  </div>`;
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — FINANCEIRO (só PRO)
+    ══════════════════════════════════════ */
+    function renderFinanceiro() {
+      return `
+  <div class="card">
+    <div class="card-title">Relatório financeiro — Março 2026</div>
+    <div class="fin-cards">
+      <div class="fin-card">
+        <div class="fin-label">Receita total</div>
+        <div class="fin-value">R$18.400</div>
+        <div class="fin-delta" style="color:var(--pro)">+8% vs fev</div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-label">Despesas</div>
+        <div class="fin-value">R$5.120</div>
+        <div class="fin-delta" style="color:var(--danger)">+2%</div>
+      </div>
+      <div class="fin-card">
+        <div class="fin-label">Lucro líquido</div>
+        <div class="fin-value">R$13.280</div>
+        <div class="fin-delta" style="color:var(--desk)">+11%</div>
+      </div>
+    </div>
+    <div class="bar-row"><span class="bar-lbl">Jan</span><div class="bar-track"><div class="bar-fill" style="width:61%"></div></div><span class="bar-val">R$11.200</span></div>
+    <div class="bar-row"><span class="bar-lbl">Fev</span><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div><span class="bar-val">R$14.800</span></div>
+    <div class="bar-row"><span class="bar-lbl">Mar</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><span class="bar-val">R$18.400</span></div>
+  </div>`;
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — CARD PACIENTE
+    ══════════════════════════════════════ */
+    function renderPacienteCard() {
+      return `
+  <div class="card">
+    <div class="card-title">Em atendimento agora</div>
+    <div class="paciente-header">
+      <div class="pac-av">MA</div>
+      <div>
+        <div class="pac-nome">Maria Alves</div>
+        <div class="pac-meta">38 anos · F · #P-00214 · PIX PAGO</div>
+      </div>
+    </div>
+    <div class="vitals-grid">
+      <div class="vital-card">
+        <div class="vital-label">Pressão</div>
+        <div class="vital-value">120<span class="vital-unit">/80</span></div>
+        <div class="vital-bar"><div class="vital-fill" style="width:58%"></div></div>
+      </div>
+      <div class="vital-card">
+        <div class="vital-label">FC</div>
+        <div class="vital-value">72<span class="vital-unit"> bpm</span></div>
+        <div class="vital-bar"><div class="vital-fill" style="width:52%"></div></div>
+      </div>
+      <div class="vital-card">
+        <div class="vital-label">SpO₂</div>
+        <div class="vital-value">97<span class="vital-unit">%</span></div>
+        <div class="vital-bar"><div class="vital-fill" style="width:97%"></div></div>
+      </div>
+      <div class="vital-card">
+        <div class="vital-label">Temp.</div>
+        <div class="vital-value">36.6<span class="vital-unit">°C</span></div>
+        <div class="vital-bar"><div class="vital-fill warn" style="width:50%"></div></div>
+      </div>
+    </div>
+    <button class="btn-secondary" onclick="navTo('prontuarios')">Ver prontuário completo</button>
+  </div>`;
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — SYSTEM STATUS
+    ══════════════════════════════════════ */
+    function renderSystemStatus() {
+      const dbOk = healthCache?.db_mode || 'postgres';
+      const dockerOk = healthCache?.docker_status !== false;
+      return `
+  <div class="card">
+    <div class="card-title">Status do sistema</div>
+    <div class="sys-row"><span class="sys-label">Flask API v4.0</span><span class="sys-value" style="color:var(--pro)"><div class="sys-dot ok"></div>localhost:5000</span></div>
+    <div class="sys-row"><span class="sys-label">PostgreSQL Docker</span><span class="sys-value" style="color:${dockerOk ? 'var(--pro)' : 'var(--warn)'}"><div class="sys-dot ${dockerOk ? 'ok' : 'warn'}"></div>:5433${dockerOk ? '' : ' · off'}</span></div>
+    <div class="sys-row"><span class="sys-label">SQLite fallback</span><span class="sys-value" style="color:var(--txt3)"><div class="sys-dot ${dbOk === 'sqlite' ? 'warn' : 'off'}"></div>${dbOk === 'sqlite' ? 'ATIVO' : 'standby'}</span></div>
+    <div class="sys-sep"></div>
+    <div class="sys-row"><span class="sys-label">SSE /stream</span><span class="sys-value" style="color:var(--pro)"><div class="sys-dot ok"></div>conectado</span></div>
+    <div class="sys-row"><span class="sys-label">sync_queue</span><span class="sys-value" style="color:${syncPending > 0 ? 'var(--warn)' : 'var(--pro)'}"><div class="sys-dot ${syncPending > 0 ? 'warn' : 'ok'}"></div>${syncPending} PENDING</span></div>
+    <div class="sys-row"><span class="sys-label">Supabase cloud</span><span class="sys-value" style="color:var(--pro)"><div class="sys-dot ok"></div>sync ativo</span></div>
+    <div class="sys-sep"></div>
+    <div class="sys-row"><span class="sys-label">Motor V14</span><span class="sys-value" style="color:var(--pro)"><div class="sys-dot ok"></div>5 dims · ativo</span></div>
+    <div class="sys-row"><span class="sys-label">Open-Meteo</span><span class="sys-value" style="color:var(--txt3)">cache 20min</span></div>
+    <div class="sys-note">Araraquara-SP · lat -21.78 · lon -48.17</div>
+  </div>`;
+    }
+
+    /* ══════════════════════════════════════
+       RENDER — OUTBOX (só PRO)
+    ══════════════════════════════════════ */
+    function renderOutbox() {
+      return `
+  <div class="card">
+    <div class="card-title">Outbox — sync_queue</div>
+    <div class="outbox-item">
+      <div class="outbox-dot pending"></div>
+      <div class="outbox-info">
+        <div class="outbox-op">INSERT · agendamentos_cloud</div>
+        <div class="outbox-detail">ROSA BARBOSA · 17:00 · PENDING</div>
+      </div>
+      <div class="outbox-tries">0 tent.</div>
+    </div>
+    <div class="outbox-item">
+      <div class="outbox-dot pending" style="animation-delay:.4s"></div>
+      <div class="outbox-info">
+        <div class="outbox-op">UPDATE · agendamentos_cloud</div>
+        <div class="outbox-detail">CARLOS SOUZA · locked_by_pro · PENDING</div>
+      </div>
+      <div class="outbox-tries">0 tent.</div>
+    </div>
+    <div class="outbox-item error-item">
+      <div class="outbox-dot error"></div>
+      <div class="outbox-info">
+        <div class="outbox-op">UPDATE · agendamentos_cloud</div>
+        <div class="outbox-detail">MARIA ALVES · status PAGO · ERROR</div>
+      </div>
+      <div class="outbox-tries" style="color:var(--danger)">5 tent.</div>
+    </div>
+    <div class="sys-note" style="margin-top:8px">FOR UPDATE SKIP LOCKED · retry max 5</div>
+  </div>`;
+    }
+
+    /* ══════════════════════════════════════
+       AÇÕES — CONFIRMAR SLOT
+    ══════════════════════════════════════ */
+    async function confirmarSlot(id, acao) {
+      try {
+        const res = await fetch(`${API}/agenda/${id}/confirmar`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${TOKEN}`
+          },
+          body: JSON.stringify({ acao })
+        });
+        if (res.ok) {
+          mostrarToast(acao === 'exigir_sinal' ? 'PIX exigido — aguardando confirmação' : 'Operação enviada', 'ok');
+          // NUNCA fazer setTimeout(fetchAgenda)!!
+          // O SSE fará isso automaticamente via backend!
+        } else {
+          mostrarToast('Erro ao confirmar — verifique permissões', 'erro');
+        }
+      } catch (e) {
+        mostrarToast('Sistema offline — ação salva localmente', 'warn');
+      }
+    }
+
+    function abrirConfirmacao(id, event) {
+      event.stopPropagation();
+      const a = agendamentosCache.find(ag => String(ag.id) === String(id));
+      if (!a) return;
+      const overlay = document.createElement('div');
+      overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:200;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s ease';
+      overlay.innerHTML = `
+    <div style="background:var(--bg2);border:1px solid var(--border2);border-radius:20px;padding:24px;max-width:360px;width:90%;animation:slideUp .3s ease">
+      ${renderRiskOverlay(a)}
+      <button onclick="this.closest('[style*=fixed]').remove()" style="width:100%;margin-top:10px;background:transparent;border:1px solid var(--border);border-radius:var(--r-pill);padding:8px;color:var(--txt3);font-size:10px;cursor:pointer">Fechar</button>
+    </div>`;
+      overlay.addEventListener('click', e => { if (e.target === overlay) overlay.remove(); });
+      document.body.appendChild(overlay);
+    }
+
+    function mudarData(novaData) {
+      dataAtual = novaData;
+      fetchAgenda(novaData);
+    }
+
+    function filtrarAgenda(termo) {
+      if (!termo.trim()) {
+        renderizarPagina();
+        return;
+      }
+      const filtrado = agendamentosCache.filter(a =>
+        (a.paciente || '').toLowerCase().includes(termo.toLowerCase()) ||
+        (a.procedimento || '').toLowerCase().includes(termo.toLowerCase())
+      );
+      const lista = document.getElementById('agenda-list-painel') || document.getElementById('agenda-list-full');
+      if (lista) lista.innerHTML = renderSlots(filtrado);
+    }
+
+    function abrirWhatsApp() {
+      const comLink = agendamentosCache.find(a => a.whatsapp_link);
+      if (comLink) window.open(comLink.whatsapp_link, '_blank');
+    }
+
+    function novoAgendamento() {
+      abrirModalAgendamento();
+    }
+
+    function abrirModalAgendamento(agendamentoExistente = null) {
+      // Remove modal anterior se existir
+      const modalAnterior = document.getElementById('modal-agendamento');
+      if (modalAnterior) modalAnterior.remove();
+
+      const isEdicao = agendamentoExistente !== null;
+      const titulo = isEdicao ? 'Editar agendamento' : 'Novo agendamento';
+
+      // Data padrão = hoje em DD/MM/AAAA
+      const hoje = new Date();
+      const dataHoje = hoje.toLocaleDateString('pt-BR').split('/').join('/');
+      // Data para input type=date = YYYY-MM-DD
+      const dataInput = hoje.toISOString().split('T')[0];
+
+      // Horários disponíveis (08:00 até 19:00 de 30 em 30min)
+      const horarios = [];
+      for (let h = 8; h <= 19; h++) {
+        horarios.push(`${String(h).padStart(2, '0')}:00`);
+        if (h < 19) horarios.push(`${String(h).padStart(2, '0')}:30`);
+      }
+      const horariosOptions = horarios.map(h =>
+        `<option value="${h}" ${agendamentoExistente?.horario === h ? 'selected' : ''}>${h}</option>`
+      ).join('');
+
+      const procedimentos = [
+        'Limpeza', 'Canal', 'Extração', 'Restauração', 'Clareamento',
+        'Implante', 'Ortodontia', 'Consulta inicial', 'Retorno', 'Urgência'
+      ];
+      const procedimentosOptions = procedimentos.map(p =>
+        `<option value="${p}" ${agendamentoExistente?.procedimento === p ? 'selected' : ''}>${p}</option>`
+      ).join('');
+
+      const convenios = [
+        'Particular', 'SUS', 'Unimed', 'Bradesco Saúde',
+        'Amil', 'Sul América', 'Outros'
+      ];
+      const conveniosOptions = convenios.map(c =>
+        `<option value="${c}" ${(agendamentoExistente?.convenio || 'Particular') === c ? 'selected' : ''}>${c}</option>`
+      ).join('');
+
+      const pagamentos = ['PIX', 'Cartão de crédito', 'Cartão de débito', 'Dinheiro'];
+      const pagamentosOptions = pagamentos.map(p =>
+        `<option value="${p}" ${agendamentoExistente?.forma_pagamento === p ? 'selected' : ''}>${p}</option>`
+      ).join('');
+
+      // Montar HTML do modal
+      const modalHTML = `
+        <div id="modal-agendamento" style="
+          position:fixed;inset:0;background:rgba(0,0,0,0.65);
+          z-index:300;display:flex;align-items:center;justify-content:center;
+          animation:fadeIn .2s ease;padding:16px;
+        ">
+          <div style="
+            background:#1a1a1a;border:1px solid rgba(255,255,255,0.13);
+            border-radius:20px;padding:28px;width:100%;max-width:520px;
+            max-height:90vh;overflow-y:auto;animation:slideUp .3s ease;
+          ">
+
+            <!-- HEADER -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:22px">
+              <div>
+                <div style="font-size:15px;font-weight:700;color:#fff;letter-spacing:-.02em">${titulo}</div>
+                <div style="font-size:10px;color:rgba(255,255,255,0.35);margin-top:2px">
+                  Campos obrigatórios marcados com *
+                </div>
+              </div>
+              <button onclick="fecharModalAgendamento()" style="
+                width:28px;height:28px;border-radius:8px;background:rgba(255,255,255,0.07);
+                border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.5);
+                cursor:pointer;font-size:14px;display:flex;align-items:center;justify-content:center;
+              ">✕</button>
+            </div>
+
+            <!-- SEÇÃO 1: DATA E HORÁRIO -->
+            <div style="margin-bottom:6px;font-size:8px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.08em">
+              Data e horário
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px">
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                  Data *
+                </label>
+                <input type="date" id="modal-data"
+                  value="${isEdicao ? converterDataParaInput(agendamentoExistente.data_agendamento) : dataInput}"
+                  style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                  border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;
+                  cursor:pointer;color-scheme:dark;">
+              </div>
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                  Horário *
+                </label>
+                <select id="modal-horario" style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                  border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;cursor:pointer;">
+                  ${horariosOptions}
+                </select>
+              </div>
+            </div>
+
+            <!-- SEÇÃO 2: PACIENTE -->
+            <div style="margin-bottom:6px;font-size:8px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.08em">
+              Dados do paciente
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                  Nome completo *
+                </label>
+                <input type="text" id="modal-paciente"
+                  value="${agendamentoExistente?.paciente || ''}"
+                  placeholder="Ex: MARIA ALVES DA SILVA"
+                  oninput="this.value = this.value.toUpperCase()"
+                  style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                  border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;">
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div>
+                  <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                    Telefone * (com DDI)
+                  </label>
+                  <input type="text" id="modal-telefone"
+                    value="${agendamentoExistente?.telefone || '55'}"
+                    placeholder="5511999999999"
+                    oninput="this.value = this.value.replace(/\\D/g,'')"
+                    maxlength="15"
+                    style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                    border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;">
+                </div>
+                <div>
+                  <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                    Data de nascimento
+                  </label>
+                  <input type="date" id="modal-nascimento"
+                    value="${agendamentoExistente?.data_nascimento || ''}"
+                    style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                    border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;color-scheme:dark;">
+                </div>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+                <div>
+                  <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                    CEP
+                  </label>
+                  <input type="text" id="modal-cep"
+                    value="${agendamentoExistente?.cep || ''}"
+                    placeholder="15800000"
+                    oninput="this.value = this.value.replace(/\\D/g,'').slice(0,8)"
+                    maxlength="8"
+                    style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                    border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;">
+                </div>
+                <div>
+                  <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                    Endereço
+                  </label>
+                  <input type="text" id="modal-endereco"
+                    value="${agendamentoExistente?.endereco_completo || ''}"
+                    placeholder="Rua, número, bairro"
+                    style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                    border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;">
+                </div>
+              </div>
+            </div>
+
+            <!-- SEÇÃO 3: PROCEDIMENTO -->
+            <div style="margin-bottom:6px;font-size:8px;font-weight:700;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.08em">
+              Procedimento e pagamento
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px">
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                  Procedimento *
+                </label>
+                <select id="modal-procedimento" style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                  border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;cursor:pointer;">
+                  ${procedimentosOptions}
+                </select>
+              </div>
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                  Convênio *
+                </label>
+                <select id="modal-convenio" style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                  border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;cursor:pointer;">
+                  ${conveniosOptions}
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:22px">
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                  Forma de pagamento
+                </label>
+                <select id="modal-pagamento" style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                  border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;cursor:pointer;">
+                  ${pagamentosOptions}
+                </select>
+              </div>
+              <div>
+                <label style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px">
+                  Status inicial
+                </label>
+                <select id="modal-status" style="width:100%;background:#222;border:1px solid rgba(255,255,255,0.08);
+                  border-radius:10px;padding:9px 12px;color:#fff;font-size:11px;outline:none;cursor:pointer;">
+                  <option value="AGUARDANDO" ${agendamentoExistente?.status === 'AGUARDANDO' ? 'selected' : (!agendamentoExistente ? 'selected' : '')}>Aguardando</option>
+                  <option value="CONFIRMADO" ${agendamentoExistente?.status === 'CONFIRMADO' ? 'selected' : ''}>Confirmado</option>
+                  <option value="SINAL" ${agendamentoExistente?.status === 'SINAL' ? 'selected' : ''}>Sinal recebido</option>
+                  <option value="PAGO" ${agendamentoExistente?.status === 'PAGO' ? 'selected' : ''}>Pago</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- ERRO -->
+            <div id="modal-erro" style="
+              display:none;font-size:10px;color:#ff5c5c;
+              background:rgba(255,92,92,0.08);border:1px solid rgba(255,92,92,0.2);
+              border-radius:9px;padding:8px 12px;margin-bottom:14px;
+            "></div>
+
+            <!-- BOTÕES -->
+            <div style="display:flex;gap:8px">
+              <button onclick="fecharModalAgendamento()" style="
+                flex:1;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);
+                border:1px solid rgba(255,255,255,0.08);border-radius:999px;
+                padding:11px;font-size:11px;cursor:pointer;transition:background .15s;
+              ">Cancelar</button>
+              <button id="modal-btn-salvar" onclick="salvarAgendamento(${isEdicao ? `'${agendamentoExistente.id}'` : 'null'})" style="
+                flex:2;background:#00c48c;color:#000;border:none;
+                border-radius:999px;padding:11px;font-size:11px;
+                font-weight:700;cursor:pointer;transition:opacity .2s;
+              ">${isEdicao ? 'Salvar alterações' : 'Confirmar agendamento'}</button>
+            </div>
+
+          </div>
+        </div>`;
+
+      document.body.insertAdjacentHTML('beforeend', modalHTML);
+
+      // Fechar ao clicar no backdrop
+      document.getElementById('modal-agendamento').addEventListener('click', function (e) {
+        if (e.target === this) fecharModalAgendamento();
+      });
+
+      // Fechar com ESC
+      document.addEventListener('keydown', fecharModalEsc);
+
+      // Foco no nome
+      setTimeout(() => document.getElementById('modal-paciente')?.focus(), 100);
+    }
+
+    function fecharModalAgendamento() {
+      const modal = document.getElementById('modal-agendamento');
+      if (modal) modal.remove();
+      document.removeEventListener('keydown', fecharModalEsc);
+    }
+
+    function fecharModalEsc(e) {
+      if (e.key === 'Escape') fecharModalAgendamento();
+    }
+
+    async function salvarAgendamento(idEdicao = null) {
+      const btn = document.getElementById('modal-btn-salvar');
+      const erroDiv = document.getElementById('modal-erro');
+
+      // Coletar valores
+      const dataInputVal = document.getElementById('modal-data').value;
+      const horario = document.getElementById('modal-horario').value;
+      const paciente = document.getElementById('modal-paciente').value.trim().toUpperCase();
+      const telefone = document.getElementById('modal-telefone').value.trim();
+      const procedimento = document.getElementById('modal-procedimento').value;
+      const convenio = document.getElementById('modal-convenio').value;
+      const status = document.getElementById('modal-status').value;
+      const cep = document.getElementById('modal-cep').value.trim();
+      const nascimento = document.getElementById('modal-nascimento').value;
+      const pagamento = document.getElementById('modal-pagamento').value;
+      const endereco = document.getElementById('modal-endereco').value.trim();
+
+      // Validação obrigatória
+      if (!dataInputVal) return mostrarErroModal('Selecione a data do agendamento.');
+      if (!horario) return mostrarErroModal('Selecione o horário.');
+      if (!paciente) return mostrarErroModal('Nome do paciente é obrigatório.');
+      if (!telefone || telefone.length < 12)
+        return mostrarErroModal('Telefone inválido. Use DDI + DDD + número (mínimo 12 dígitos).');
+
+      // Converter data de YYYY-MM-DD para DD/MM/AAAA (formato legado do banco)
+      const [ano, mes, dia] = dataInputVal.split('-');
+      const dataFormatada = `${dia}/${mes}/${ano}`;
+
+      // Montar payload — exatamente os campos da tabela
+      const payload = {
+        data_agendamento: dataFormatada,
+        horario,
+        paciente,
+        telefone,
+        procedimento,
+        convenio,
+        status,
+        ...(cep && { cep }),
+        ...(nascimento && { data_nascimento: nascimento }),
+        ...(pagamento && { forma_pagamento: pagamento }),
+        ...(endereco && { endereco_completo: endereco }),
+      };
+
+      // Desabilitar botão
+      btn.disabled = true;
+      btn.textContent = 'Salvando...';
+      erroDiv.style.display = 'none';
+
+      try {
+        const metodo = idEdicao ? 'PATCH' : 'POST';
+        const url = idEdicao
+          ? `/agenda/${idEdicao}`
+          : `/agenda`;
+
+        const res = await apiFetch(url, {
+          method: metodo,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${TOKEN}`
+          },
+          body: JSON.stringify(payload),
+          signal: AbortSignal.timeout(6000)
+        });
+
+        const data = await res.json();
+
+        if (res.status === 409) {
+          return mostrarErroModal(`Horário ${horario} já está ocupado nesta data.`);
+        }
+
+        if (res.status === 400) {
+          return mostrarErroModal(data.erro || 'Dados inválidos. Verifique os campos.');
+        }
+
+        if (res.status === 401) {
+          fecharModalAgendamento();
+          mostrarToast('Sessão expirada — faça login novamente', 'erro');
+          return;
+        }
+
+        if (!res.ok) {
+          return mostrarErroModal(`Erro do servidor: HTTP ${res.status}`);
+        }
+
+        // Sucesso!
+        fecharModalAgendamento();
+        mostrarToast(
+          idEdicao
+            ? `Agendamento atualizado — ${paciente}`
+            : `Agendamento criado — ${paciente} às ${horario}`,
+          'ok'
+        );
+
+        // SSE vai disparar agenda_updated automaticamente
+        // Fallback: força fetchAgenda após 2s
+        setTimeout(fetchAgenda, 2000);
+
+      } catch (e) {
+        if (e.name === 'TimeoutError') {
+          mostrarErroModal('Tempo esgotado — servidor local lento. Tente novamente.');
+        } else if (e.name === 'TypeError') {
+          mostrarErroModal('Não foi possível conectar ao servidor. Flask está rodando?');
+        } else {
+          mostrarErroModal('Erro inesperado: ' + e.message);
+        }
+        console.error('[OdontoFlow] salvarAgendamento erro:', e);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = idEdicao ? 'Salvar alterações' : 'Confirmar agendamento';
+      }
+    }
+
+    function mostrarErroModal(msg) {
+      const erroDiv = document.getElementById('modal-erro');
+      if (erroDiv) {
+        erroDiv.textContent = msg;
+        erroDiv.style.display = 'block';
+      }
+      const btn = document.getElementById('modal-btn-salvar');
+      if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Confirmar agendamento';
+      }
+    }
+
+    // Converte DD/MM/AAAA → YYYY-MM-DD para o input type=date
+    function converterDataParaInput(dataBR) {
+      if (!dataBR) return new Date().toISOString().split('T')[0];
+      const partes = dataBR.split('/');
+      if (partes.length !== 3) return new Date().toISOString().split('T')[0];
+      return `${partes[2]}-${partes[1]}-${partes[0]}`;
+    }
+
+    /* ══════════════════════════════════════
+       TOAST
+    ══════════════════════════════════════ */
+    function mostrarToast(msg, tipo = 'ok') {
+      const t = document.createElement('div');
+      const cores = { ok: 'var(--pro)', erro: 'var(--danger)', warn: 'var(--warn)', info: 'var(--desk)' };
+      t.style.cssText = `position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid ${cores[tipo]};border-radius:var(--r-pill);padding:8px 16px;font-size:11px;color:var(--txt);z-index:500;animation:fadeIn .3s ease;white-space:nowrap;box-shadow:0 4px 20px rgba(0,0,0,0.3)`;
+      t.textContent = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 3000);
+    }
+
+    /* ══════════════════════════════════════
+       BIND EVENTS (pós render)
+    ══════════════════════════════════════ */
+    function bindEvents() {
+      // Garantir que health bar existe e está atualizado
+      setTimeout(() => {
+        atualizarSseBar(true, healthCache);
+      }, 50);
+    }
+
+    /* ══════════════════════════════════════
+       DADOS MOCK (fallback offline)
+    ══════════════════════════════════════ */
+    function getDadosMock() {
+      return [
+        {
+          id: '1', horario: '09:00', paciente: 'MARIA ALVES', procedimento: 'Limpeza',
+          convenio: 'Particular', status: 'EM_ANDAMENTO', telefone_limpo: '5511999990001',
+          whatsapp_link: 'https://wa.me/5511999990001?text=Ol%C3%A1+Maria',
+          locked_by_pro: false,
+          risco_falta: {
+            nivel: 'BAIXO', score: 18, cor: '#00c48c', fatores: [], exigir_sinal: false, alerta_agenda: false,
+            sugestao_ia: { vetor_paciente: 'Terça-feira (Manhã)', vetor_clinica: 'Segunda-feira (Tarde)' }
+          }
+        },
+        {
+          id: '2', horario: '10:30', paciente: 'CARLOS SOUZA', procedimento: 'Canal',
+          convenio: 'Convênio Teta', status: 'CONFIRMADO', telefone_limpo: '5511999990002',
+          whatsapp_link: 'https://wa.me/5511999990002?text=Ol%C3%A1+Carlos',
+          locked_by_pro: true,
+          risco_falta: {
+            nivel: 'MEDIO', score: 48, cor: '#ff9f2e', fatores: ['Convênio (+20)', 'Sem histórico (+0)'], exigir_sinal: false, alerta_agenda: false,
+            sugestao_ia: { vetor_paciente: 'Quarta-feira (Tarde)', vetor_clinica: 'Quinta-feira (Manhã)' }
+          }
+        },
+        {
+          id: '3', horario: '14:00', paciente: 'JOÃO SILVA', procedimento: 'Canal',
+          convenio: 'Convênio Teta', status: 'AGUARDANDO', telefone_limpo: '5511999990003',
+          whatsapp_link: 'https://wa.me/5511999990003?text=Ol%C3%A1+Jo%C3%A3o',
+          locked_by_pro: false,
+          risco_falta: {
+            nivel: 'ALTO', score: 87, cor: '#ff5c5c',
+            fatores: ['Chuva prevista 3.2mm (+20)', 'Convênio Teta (+20)', 'CEP 15800 fora de Araraquara (+15)', '2 faltas nos últimos 60 dias (+32)'],
+            exigir_sinal: true, alerta_agenda: true,
+            sugestao_ia: { vetor_paciente: 'Quarta-feira (Manhã)', vetor_clinica: 'Quinta-feira (Tarde)' }
+          }
+        },
+        {
+          id: '4', horario: '15:30', paciente: 'CAMILA FERREIRA', procedimento: 'Extração',
+          convenio: 'Particular', status: 'AGUARDANDO', telefone_limpo: '5511999990004',
+          whatsapp_link: 'https://wa.me/5511999990004?text=Ol%C3%A1+Camila',
+          locked_by_pro: false,
+          risco_falta: {
+            nivel: 'MEDIO', score: 45, cor: '#ff9f2e', fatores: ['Chuva prevista (+10)', 'Idade 22 anos (+5)'], exigir_sinal: false, alerta_agenda: false,
+            sugestao_ia: { vetor_paciente: 'Terça-feira (Tarde)', vetor_clinica: 'Segunda-feira (Manhã)' }
+          }
+        },
+        {
+          id: '5', horario: '17:00', paciente: 'ROSA BARBOSA', procedimento: 'Consulta inicial',
+          convenio: 'Particular', status: 'CONFIRMADO', telefone_limpo: '5511999990005',
+          whatsapp_link: 'https://wa.me/5511999990005?text=Ol%C3%A1+Rosa',
+          locked_by_pro: false,
+          risco_falta: {
+            nivel: 'BAIXO', score: 12, cor: '#00c48c', fatores: ['PIX confirmado (-10)', 'Faixa etária ideal (-10)'], exigir_sinal: false, alerta_agenda: false,
+            sugestao_ia: { vetor_paciente: 'Sexta-feira (Manhã)', vetor_clinica: 'Quinta-feira (Tarde)' }
+          }
+        }
+      ];
+    }
+
+    function getClimaMock() {
+      return { icone: '🌧', temperatura: 19, descricao: 'Chuva moderada', alerta_agenda: true };
+    }
+  </script>
+</body>
+
+</html>
