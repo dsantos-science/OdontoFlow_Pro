@@ -1,34 +1,44 @@
-# OdontoFlow Pro
+# OdontoFlow Pro v4.6 
+**Motor Logístico, Estatístico e de Alta Disponibilidade para Clínicas Odontológicas Premium.**
 
-Sistema premium de gestão clínica odontológica, desenvolvido inteiramente em Python. Utiliza uma interface gráfica moderna (CustomTkinter v19) acoplada a um banco de dados relacional robusto (SQLite3), focado na produtividade, prevenção de erros e relatórios dinâmicos empresariais.
+O OdontoFlow Pro deixou de ser um simples sistema de agendamento para se tornar uma infraestrutura **Edge Computing (Local-First)**. Focado em duas métricas absolutas: **Zero Latência** na recepção e **Zero Perda de Faturamento** por faltas (No-Show), utilizando IA Preditiva e Prescritiva em tempo real.
 
-## 🚀 Principais Funcionalidades
+## 🚀 Engenharia de Destaque (Os 5 Superpoderes)
 
-- **Agendamento Inteligente:** Prevenção sistêmica de duplicidade (Unique Constraints SQL). Bloqueio automático de marcações em dias não úteis (ex: Domingos).
-- **Validação de Formulários em Tempo Real:** Checagem rigorosa de campos vitais antes da persistência de dados.
-- **Geração de PDF Diário:** Motor `ReportLab` embutido para criar fichas elegantes em formato A4, com cálculos instantâneos de todo o faturamento previsto do dia.
-- **UI/UX Moderna:** Construído com `CustomTkinter` no estilo "v19", garantindo estética limpa, cores harmoniosas (Slate/Blue) e zero gargalos de renderização (Sandbox testado).
-- **Gestão Ágil:** Dashboard analítico superior com os quadros: Ocupação, Quantidade de Cadastros e Previsão de Entradas Financeiras.
+* **Motor Prescritivo V14 (IA de Risco):** O sistema não apenas agenda; ele calcula a probabilidade matemática de falta do paciente cruzando 6 dimensões em tempo real: 
+  1. *Clima* (Integração Open-Meteo para tempestades locais).
+  2. *Heurística Etária* (Curva em U de risco).
+  3. *Histórico Recidivo* (Pesos exponenciais para faltas recentes).
+  4. *Atrito Financeiro* (Bypass de segurança para PIX/Sinal).
+  5. *Logística* (Distância via CEP).
+  6. *Afinidade Temporal* (Dias de menor atrito).
+* **Arquitetura Híbrida & Fallback (Resiliência Musk):** O banco de dados primário opera em **PostgreSQL (Docker)** para performance máxima. Em caso de falha do container, o sistema desvia silenciosamente para um **SQLite** local, garantindo que a clínica nunca pare de operar.
+* **Latência Zero Absoluta (SSE):** Morte ao *polling*. A interface se comunica com o motor Python via **Server-Sent Events (SSE)**. Se o dentista confirmar um agendamento no consultório, a tela da secretária atualiza no exato milissegundo.
+* **Antigravity Frontend (Vanilla ES6):** Interface construída 100% em JavaScript puro, sem frameworks pesados (React/Vue). Utiliza a estética **Google Stitch Glassmorphism Dark**, garantindo renderização instantânea até em hardwares antigos.
+* **Sincronia Nuvem (Transactional Outbox):** Operações locais são enfileiradas de forma segura (`SKIP LOCKED`) e enviadas assincronamente para a nuvem (Supabase) via *workers* em background, garantindo o backup sem travar a recepção.
 
-## 🛠️ Stack Tecnológica
+## 🛠️ Stack Tecnológica Restrita (Zero Arrasto)
 
-- **Front-End:** Python 3 + CustomTkinter + tkcalendar
-- **Back-End:** Python Genérico + Estrutura Modular
-- **Banco de Dados:** SQLite3 nativo
-- **Geração de Arquivos:** ReportLab (Exportações estruturadas)
+* **Back-End (Motor V14):** Python 3.10+ com Flask v4.0 (API REST e Streaming SSE).
+* **Front-End (Edge):** HTML5 / CSS3 / Vanilla ES6 (Rodando nativamente porta 3000).
+* **Banco de Dados (Orquestrado):** PostgreSQL (Docker) ↔ SQLite3 (Fallback) ↔ Supabase (Nuvem).
+* **Autenticação:** JWT (HMAC-SHA256) manual, sem dependências externas.
 
-## 🤖 Roadmap Futuro
+## 🤖 Ações de IA Prescritiva
 
-- Expansão do Front-End e Back-End em Microsserviços
-- **Integração com Inteligência Artificial (IA)**: Ferramentas de suporte preditivas ao diagnóstico e gestão automática de comunicação com o paciente (Chatbot integrado / Lembretes).
+Quando um agendamento atinge o nível **ALTO RISCO (Score > 85)**, o sistema:
+1. Emite um alerta visual pulsante na interface.
+2. Bloqueia a confirmação simples.
+3. Fornece duas coordenadas vetoriais (*Vetor Paciente* e *Vetor Clínica*) sugerindo o dia/hora ideal para remarcação baseado em ociosidade e histórico.
+4. Sugere a cobrança de **Sinal Financeiro (PIX)** para forçar o comprometimento (*Skin in the Game*).
 
-## 💻 Para Executar o Projeto
+## 💻 Como Executar a Ignição (Cold Start)
 
-Certifique-se de estar com o ambiente Python ativado e instalar as bibliotecas necessárias:
+O sistema foi desenhado para inicialização em 1 Clique via script de orquestração.
 
-```cmd
-pip install customtkinter tkcalendar reportlab
-python main.py
-```
+**Pré-requisitos:** Python 3.10+, Docker Desktop (opcional, mas recomendado).
 
-*OdontoFlow Pro - Tecnologias Inteligentes para Odontologia Premium.*
+1. Clone o repositório.
+2. Instale as dependências mínimas do motor:
+   ```bash
+   pip install flask flask-cors requests psycopg2-binary
